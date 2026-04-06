@@ -1,13 +1,319 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>oduwa</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Portfolio | Minimalist & AI</title>
+    <!-- TrashHand Font -->
+    <link href="https://fonts.cdnfonts.com/css/trashhand" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --font-main: 'TrashHand', sans-serif;
+            --transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --accent: #6366f1;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Central Hero Image */
+        .hero-figure {
+            height: 85vh;
+            width: auto;
+            z-index: 1;
+            user-select: none;
+            pointer-events: none;
+            filter: contrast(1.05);
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        /* Navigation Links Logic */
+        nav a {
+            position: absolute;
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            z-index: 10;
+            transition: var(--transition);
+            cursor: pointer;
+            line-height: 1;
+            opacity: 0;
+            animation: revealText 1s forwards;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+            transform: scale(1.1) !important;
+        }
+
+        .ai-sparkle {
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+
+        .ai-sparkle:hover {
+            transform: rotate(20deg) scale(1.3);
+        }
+
+        /* Verbatim Placement mapping the radial style */
+        .nav-video { top: 20%; left: 8%; transform: rotate(-12deg); animation-delay: 0.2s; }
+        .nav-inflection { top: 8%; left: 32%; transform: rotate(2deg); animation-delay: 0.4s; }
+        .nav-tour { top: 22%; right: 28%; transform: rotate(8deg); animation-delay: 0.6s; }
+        .nav-music { top: 42%; right: 12%; transform: rotate(-6deg); animation-delay: 0.8s; }
+        .nav-join { bottom: 22%; right: 18%; transform: rotate(4deg); animation-delay: 1s; }
+
+        /* Floating Animation */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(var(--rot)); }
+            50% { transform: translateY(-10px) rotate(var(--rot)); }
+            100% { transform: translateY(0px) rotate(var(--rot)); }
+        }
+
+        .nav-video { --rot: -12deg; animation: revealText 1s forwards 0.2s, float 4s ease-in-out infinite; }
+        .nav-inflection { --rot: 2deg; animation: revealText 1s forwards 0.4s, float 3.5s ease-in-out infinite; }
+        .nav-tour { --rot: 8deg; animation: revealText 1s forwards 0.6s, float 4.5s ease-in-out infinite; }
+        .nav-music { --rot: -6deg; animation: revealText 1s forwards 0.8s, float 3.8s ease-in-out infinite; }
+        .nav-join { --rot: 4deg; animation: revealText 1s forwards 1s, float 4.2s ease-in-out infinite; }
+
+        @keyframes revealText {
+            from { opacity: 0; transform: translateY(20px) rotate(var(--rot)); }
+            to { opacity: 1; transform: translateY(0) rotate(var(--rot)); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* AI Output Overlay */
+        #ai-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .ai-content {
+            font-size: 2.5rem;
+            max-width: 800px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .close-btn {
+            background: black;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-family: inherit;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #eee;
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Social Icons */
+        .socials {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            display: flex;
+            gap: 24px;
+            z-index: 20;
+        }
+
+        .socials svg { width: 20px; height: 20px; fill: currentColor; }
+
+        @media (max-width: 768px) {
+            .hero-figure { height: 50vh; }
+            nav a { font-size: 1.8rem; }
+            .nav-video { left: 5%; top: 25%; }
+            .nav-inflection { left: 10%; top: 10%; }
+            .nav-tour { right: 10%; top: 15%; }
+            .nav-music { right: 5%; top: 40%; }
+            .nav-join { right: 10%; bottom: 15%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="https://uploads.onecompiler.io/44jjpumhc/44jjpz9rp/Energy%201-2.png" alt="Artist" class="hero-figure">
+
+        <nav id="main-nav">
+            <a href="https://www.instagram.com/oduwaiam/$0" class="nav-video">VIDEO <span class="ai-sparkle" onclick="generateVibe('video')">✨</span></a>
+            <a href="https://unitedmasters.com/m/inflection" target="_blank" class="nav-inflection">INFLECTION <span class="ai-sparkle" onclick="generateVibe('inflection')">✨</span></a>
+            <a href="#" class="nav-tour">TOUR <span class="ai-sparkle" onclick="generateVibe('tour')">✨</span></a>
+            <a href="https://unitedmasters.com/m/inflection" class="nav-music">MUSIC <span class="ai-sparkle" onclick="generateVibe('music')">✨</span></a>
+            <a href="#" class="nav-join">JOIN <span class="ai-sparkle" onclick="generateVibe('join')">✨</span></a>
+        </nav>
+
+        <div class="socials">
+            <a href="#"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.266.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.848 0-3.204.012-3.584.07-4.849.149-3.225 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+            <a href="#"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <a href="#"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        </div>
+    </div>
+
+    <!-- AI Display Overlay -->
+    <div id="ai-overlay">
+        <div id="ai-loader" class="loader"></div>
+        <div id="ai-text" class="ai-content"></div>
+        <button class="close-btn" onclick="closeAI()">RETURN</button>
+    </div>
+
+    <script>
+        const apiKey = "AIzaSyBl-ZDKmfWAhCHU2IC1PwFDYjXoUpvd3E4"; // Managed by environment
+        const model = "gemini-2.5-flash-preview-09-2025";
+        const ttsModel = "gemini-2.5-flash-preview-tts";
+
+        async function generateVibe(topic) {
+            const overlay = document.getElementById('ai-overlay');
+            const textEl = document.getElementById('ai-text');
+            const loader = document.getElementById('ai-loader');
+            
+            overlay.style.display = 'flex';
+            textEl.innerText = '';
+            loader.style.display = 'block';
+
+            const prompt = `Act as the artistic creative director for a high-fashion music artist portfolio. 
+            The theme is 'Street-Couture' and 'Inflection'. 
+            Generate a short, poetic 2-line lyric or vision statement for the section: ${topic.toUpperCase()}. 
+            Keep it cryptic, magical, and minimalist. 15 words max. No emojis.`;
+
+            try {
+                let responseText = "";
+                let attempts = 0;
+                while(attempts < 5) {
+                    try {
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                        });
+                        const data = await res.json();
+                        responseText = data.candidates[0].content.parts[0].text;
+                        break;
+                    } catch (e) {
+                        attempts++;
+                        await new Promise(r => setTimeout(r, Math.pow(2, attempts) * 1000));
+                    }
+                }
+
+                loader.style.display = 'none';
+                textEl.innerText = responseText;
+                
+                // Trigger TTS
+                speak(responseText);
+
+            } catch (error) {
+                textEl.innerText = "The signal was lost in the grain.";
+                loader.style.display = 'none';
+            }
+        }
+
+        async function speak(text) {
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${ttsModel}:generateContent?key=${apiKey}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Say in a calm, artistic whisper: ${text}` }] }],
+                        generationConfig: {
+                            responseModalities: ["AUDIO"],
+                            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Zephyr" } } }
+                        }
+                    })
+                });
+                const data = await res.json();
+                const pcmData = data.candidates[0].content.parts[0].inlineData.data;
+                playWav(pcmData);
+            } catch (e) {
+                console.error("TTS failed", e);
+            }
+        }
+
+        function playWav(base64Pcm) {
+            const byteCharacters = atob(base64Pcm);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([createWavHeader(byteArray.length, 24000), byteArray], { type: 'audio/wav' });
+            const url = URL.createObjectURL(blob);
+            const audio = new Audio(url);
+            audio.play();
+        }
+
+        function createWavHeader(dataLength, sampleRate) {
+            const header = new ArrayBuffer(44);
+            const view = new DataView(header);
+            view.setUint32(0, 0x52494646, false); // "RIFF"
+            view.setUint32(4, 36 + dataLength, true);
+            view.setUint32(8, 0x57415645, false); // "WAVE"
+            view.setUint32(12, 0x666d7420, false); // "fmt "
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true); // PCM
+            view.setUint16(22, 1, true); // Mono
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            view.setUint32(36, 0x64617461, false); // "data"
+            view.setUint32(40, dataLength, true);
+            return header;
+        }
+
+        function closeAI() {
+            document.getElementById('ai-overlay').style.display = 'none';
+        }
+    </script>
+</body>
 </html>
