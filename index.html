@@ -394,8 +394,8 @@
             <div class="portal-section">
                 <span class="section-label">Fan Resonance Portal</span>
                 <textarea id="fan-message" placeholder="Send a vibration to Oduwa..."></textarea>
-                <button class="btn-action" onclick="sendVibration()">SEND MESSAGE</button>
-                <div id="fan-status" style="margin-top:10px; font-family: sans-serif; font-size: 0.85rem; color: #22c55e;"></div>
+                <button class="btn-action" id="send-vibe-btn" onclick="sendVibration()">SEND MESSAGE</button>
+                <div id="fan-status" style="margin-top:10px; font-family: sans-serif; font-size: 0.85rem; font-weight: 600;"></div>
             </div>
 
             <!-- Tracking Portal -->
@@ -427,17 +427,33 @@
     </div>
 
     <div id="ai-overlay" class="overlay">
-        <div id="ai-text" class="ai-content" style="font-family: var(--font-main); font-size: 2.5rem; max-width: 700px;"></div>
+        <div id="ai-text" class="ai-content" style="font-family: var(--font-main); font-size: 2.5rem; max-width: 700px; text-align: center;"></div>
         <button class="btn-close" onclick="closePortal('ai-overlay')">RETURN</button>
     </div>
 
     <script>
         const apiKey = "";
         const model = "gemini-2.5-flash-preview-09-2025";
+        const WORKER_URL = "https://inflection-api.mehmehquinltd.workers.dev";
         let cart = [];
 
         function openPortal(id) { document.getElementById(id).style.display = 'flex'; }
         function closePortal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // Core Communication Function
+        async function sendToWorker(payload) {
+            try {
+                const response = await fetch(WORKER_URL, {
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                    headers: { "Content-Type": "application/json" }
+                });
+                return await response.json();
+            } catch (e) {
+                console.error("Transmission Error:", e);
+                return { success: false };
+            }
+        }
 
         // Cart Logic
         function addToCart(sku, name, price) {
@@ -493,13 +509,39 @@
             }, 1000);
         }
 
-        function sendVibration() {
-            const msg = document.getElementById('fan-message').value;
+        async function sendVibration() {
+            const msgInput = document.getElementById('fan-message');
+            const btn = document.getElementById('send-vibe-btn');
             const status = document.getElementById('fan-status');
-            if(!msg) return;
-            status.innerText = "Vibration sent to the source...";
-            document.getElementById('fan-message').value = "";
-            setTimeout(() => { status.innerText = ""; }, 3000);
+            const content = msgInput.value;
+            
+            if(!content.trim()) return;
+
+            btn.disabled = true;
+            btn.innerText = "TRANSMITTING...";
+            status.style.color = "#000";
+            status.innerText = "Linking with the frequency...";
+
+            const result = await sendToWorker({
+                type: "fan_message",
+                content: content,
+                date: new Date().toISOString()
+            });
+
+            if(result.success) {
+                status.style.color = "#22c55e";
+                status.innerText = "Signal received. Frequency stored.";
+                msgInput.value = "";
+            } else {
+                status.style.color = "#ef4444";
+                status.innerText = "Interference detected. Try again.";
+            }
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerText = "SEND MESSAGE";
+                if(result.success) status.innerText = "";
+            }, 3000);
         }
 
         // Merch Analytics Mock
