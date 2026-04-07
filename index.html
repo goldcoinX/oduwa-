@@ -153,6 +153,36 @@
 
         .portal-title { font-size: 3.5rem; color: #000; margin-bottom: 25px; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
+        /* Sections inside Portals */
+        .portal-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #ddd;
+        }
+        .section-label {
+            display: block;
+            font-family: sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        /* Inputs & Textareas */
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            font-family: sans-serif;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            background: #f9f9f9;
+        }
+        textarea { height: 100px; resize: none; }
+
         /* Music Specific Grid */
         .music-grid {
             display: grid;
@@ -309,13 +339,13 @@
         </div>
     </div>
 
-    <!-- OTHER PORTALS (Merch, Tour, etc.) -->
+    <!-- MERCH PORTAL -->
     <div id="merch-portal" class="overlay">
         <div class="portal-card">
             <h2 class="portal-title">Store</h2>
-            <div class="cart-status">
-                <span id="cart-summary">Cart Empty</span>
-                <button class="btn-action" style="width: auto; padding: 5px 20px;" id="checkout-btn" onclick="checkout()" disabled>CHECKOUT</button>
+            <div class="cart-status" style="margin-bottom: 20px; text-align: center; font-family: sans-serif;">
+                <span id="cart-summary" style="font-weight: bold; color: var(--accent);">Cart Empty</span>
+                <button class="btn-action" style="width: auto; padding: 5px 20px; margin-left: 10px;" id="checkout-btn" onclick="checkout()" disabled>CHECKOUT</button>
             </div>
             <div class="merch-grid">
                 <div class="merch-item">
@@ -339,6 +369,7 @@
         </div>
     </div>
 
+    <!-- TOUR PORTAL -->
     <div id="tour-portal" class="overlay">
         <div class="portal-card">
             <h2 class="portal-title">Live Frequencies</h2>
@@ -354,15 +385,43 @@
         </div>
     </div>
 
+    <!-- JOIN PORTAL (FAN & MERCH TRACKING) -->
     <div id="join-portal" class="overlay">
         <div class="portal-card">
             <h2 class="portal-title">Tribe Access</h2>
+            
+            <!-- Fan Portal -->
+            <div class="portal-section">
+                <span class="section-label">Fan Resonance Portal</span>
+                <textarea id="fan-message" placeholder="Send a vibration to Oduwa..."></textarea>
+                <button class="btn-action" onclick="sendVibration()">SEND MESSAGE</button>
+                <div id="fan-status" style="margin-top:10px; font-family: sans-serif; font-size: 0.85rem; color: #22c55e;"></div>
+            </div>
+
+            <!-- Tracking Portal -->
             <div class="portal-section">
                 <span class="section-label">Order & Ticket Tracking</span>
                 <input type="text" id="track-input" placeholder="Enter Tracking ID (e.g. TRK-...)">
                 <button class="btn-action" onclick="runTracking()">TRACK FREQUENCY</button>
-                <div id="track-display" style="margin-top:15px; font-family: sans-serif; font-size: 0.9rem; color: var(--accent);"></div>
+                <div id="track-display" style="margin-top:10px; font-family: sans-serif; font-size: 0.9rem; color: var(--accent);"></div>
             </div>
+
+            <!-- Merch Sales Intelligence -->
+            <div class="portal-section" style="border-bottom: none;">
+                <span class="section-label">Merch Sales Intelligence</span>
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <input type="text" id="merch-code-input" placeholder="Enter SKU Code (e.g. INF-01)" style="margin-bottom: 0;">
+                    <button class="btn-action" style="width: auto;" onclick="trackSales()">ANALYZE</button>
+                </div>
+                <div id="merch-stats" style="padding: 15px; background: #fdfdfd; border-radius: 12px; border: 1px solid #eee; display: none;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-family: sans-serif; font-size: 0.9rem;">
+                        <div>Units Sold: <strong id="stat-units" style="color: var(--accent);">--</strong></div>
+                        <div>Revenue: <strong id="stat-revenue" style="color: #22c55e;">--</strong></div>
+                        <div style="grid-column: span 2;">Status: <span id="stat-status" style="font-style: italic;">Calibrating...</span></div>
+                    </div>
+                </div>
+            </div>
+
             <button class="btn-close" onclick="closePortal('join-portal')">Back to World</button>
         </div>
     </div>
@@ -380,6 +439,7 @@
         function openPortal(id) { document.getElementById(id).style.display = 'flex'; }
         function closePortal(id) { document.getElementById(id).style.display = 'none'; }
 
+        // Cart Logic
         function addToCart(sku, name, price) {
             cart.push({sku, name, price});
             updateCartUI();
@@ -420,6 +480,7 @@
             document.getElementById('track-display').innerText = `Ticket Secured for ${city}! ID: ${tixId}`;
         }
 
+        // Tracking & Fan Interaction
         function runTracking() {
             const val = document.getElementById('track-input').value;
             const display = document.getElementById('track-display');
@@ -430,6 +491,46 @@
                 else if(val.startsWith('TIX')) display.innerText = "TICKET VALIDATED: Frequency sync complete.";
                 else display.innerText = "ID unrecognized.";
             }, 1000);
+        }
+
+        function sendVibration() {
+            const msg = document.getElementById('fan-message').value;
+            const status = document.getElementById('fan-status');
+            if(!msg) return;
+            status.innerText = "Vibration sent to the source...";
+            document.getElementById('fan-message').value = "";
+            setTimeout(() => { status.innerText = ""; }, 3000);
+        }
+
+        // Merch Analytics Mock
+        function trackSales() {
+            const code = document.getElementById('merch-code-input').value.toUpperCase();
+            const stats = document.getElementById('merch-stats');
+            const units = document.getElementById('stat-units');
+            const rev = document.getElementById('stat-revenue');
+            const statText = document.getElementById('stat-status');
+
+            if(!code) return;
+            stats.style.display = 'block';
+            units.innerText = "---";
+            rev.innerText = "---";
+            statText.innerText = "Fetching real-time data...";
+
+            setTimeout(() => {
+                if(code === 'INF-01') {
+                    units.innerText = "1,248";
+                    rev.innerText = "$56,160.00";
+                    statText.innerText = "Trending: High Demand";
+                } else if(code === 'INF-VIN') {
+                    units.innerText = "432";
+                    rev.innerText = "$15,120.00";
+                    statText.innerText = "Limited Edition: 68 left";
+                } else {
+                    units.innerText = "0";
+                    rev.innerText = "$0.00";
+                    statText.innerText = "SKU not found in catalog.";
+                }
+            }, 1200);
         }
 
         async function triggerGemini(type) {
