@@ -30,7 +30,7 @@
         .container { position: relative; width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .hero-wrapper { position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; z-index: 1; }
         .hero-figure { 
-            height: 100%; width: 100%; object-fit: cover; filter: brightness(0.5); 
+            height: 100%; width: 100%; object-fit: cover; filter: brightness(0.6); 
             background-color: #111;
         }
 
@@ -50,14 +50,16 @@
         }
 
         .nav-inflection { top: 6%; left: 50%; transform: translateX(-50%); font-size: clamp(2.5rem, 10vw, 7.5rem); z-index: 50; letter-spacing: -0.04em; font-weight: 800; animation: revealText 1.5s forwards; }
-        .nav-video { top: 28%; left: 12%; }
-        .nav-booking { top: 22%; left: 30%; }
-        .nav-bio { top: 20%; left: 50%; transform: translateX(-50%); }  
-        .nav-tour { top: 25%; right: 15%; }
-        .nav-merch { top: 50%; left: 8%; }
-        .nav-music { top: 50%; right: 8%; }
-        .nav-gallery { bottom: 22%; left: 15%; }
-        .nav-join { bottom: 22%; right: 15%; }
+        
+        .nav-booking { top: 32%; left: 30%; }
+        .nav-bio { top: 30%; left: 50%; transform: translateX(-50%); }  
+        
+        .nav-video { top: 35%; left: 12%; }
+        .nav-tour { top: 32%; right: 15%; }
+        .nav-merch { top: 55%; left: 8%; }
+        .nav-music { top: 55%; right: 8%; }
+        .nav-gallery { bottom: 18%; left: 15%; }
+        .nav-join { bottom: 18%; right: 15%; }
 
         .bling { display: inline-block; font-size: 0.5em; color: var(--text-color); animation: blingScale 2.2s infinite; opacity: 0.6; }
         
@@ -80,7 +82,6 @@
             box-sizing: border-box;
         }
 
-        /* Custom Scrollbar for Portals */
         .portal-card::-webkit-scrollbar { width: 6px; }
         .portal-card::-webkit-scrollbar-track { background: var(--portal-bg); }
         .portal-card::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
@@ -144,7 +145,14 @@
 
         .bio-content p { color: #bbb; line-height: 1.8; margin-bottom: 20px; font-size: 0.95rem; }
 
-        /* Improved mobile styles */
+        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+        .social-links a { color: #fff; text-decoration: none; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; transition: 0.3s; }
+        .social-links a:hover { opacity: 1; }
+
+        .floating-socials { position: fixed; bottom: 30px; right: 30px; z-index: 500; display: flex; flex-direction: column; gap: 15px; }
+        .floating-socials a { color: #fff; opacity: 0.5; transition: 0.3s; text-decoration: none; font-size: 1.2rem; }
+        .floating-socials a:hover { opacity: 1; transform: translateX(-5px); }
+
         @media (max-width: 768px) {
             .container { padding-top: 0; }
             nav { 
@@ -183,9 +191,9 @@
             }
             .portal-card { padding: 30px 20px; }
             .gallery-grid { grid-template-columns: 1fr !important; }
+            .floating-socials { bottom: auto; top: 30px; right: 20px; flex-direction: row; }
         }
 
-        /* Gallery grid */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -212,14 +220,7 @@
             font-family: var(--font-main);
         }
         .tour-date span:last-child:hover { text-decoration: underline; }
-        .music-embed {
-            width: 100%;
-            height: 152px;
-            border: none;
-            margin: 20px 0;
-        }
 
-        /* Discography Grid */
         .disco-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; margin-top: 20px; }
         .disco-item { text-align: center; text-decoration: none; display: block; transition: transform 0.3s; }
         .disco-item:hover { transform: scale(1.05); }
@@ -231,7 +232,7 @@
 
     <div class="container">
         <div class="hero-wrapper">
-            <img src="https://uploads.onecompiler.io/44jjpumhc/44jzu3ttt/home_new.png" 
+            <img src="https://uploads.onecompiler.io/44jjpumhc/44k2gg9sv/newnew_Home_Image.jpg" 
                  onerror="this.src='https://images.unsplash.com/photo-1493225458580-43e1e35dac78?auto=format&fit=crop&q=80&w=2000'" 
                  alt="Oduwa Hero" class="hero-figure">
         </div>
@@ -247,6 +248,13 @@
             <a onclick="openPortal('music-portal')" class="nav-music">MUSIC <span class="bling">●</span></a>
             <a onclick="openPortal('join-portal')" class="nav-join">JOIN <span class="bling">●</span></a>
         </nav>
+
+        <div class="floating-socials">
+            <a href="https://instagram.com/oduwaiam" target="_blank">IG</a>
+            <a href="https://twitter.com/oduwaiam" target="_blank">X</a>
+            <a href="https://tiktok.com/@oduwaiam" target="_blank">TK</a>
+            <a href="https://youtube.com/@ODUWAIAM" target="_blank">YT</a>
+        </div>
 
         <footer>
             <a href="mailto:Info@oduwaiam.com" class="footer-email">Info@oduwaiam.com</a>
@@ -303,6 +311,12 @@
                 <div id="ai-booking-output" class="ai-output"></div>
             </div>
 
+            <div class="social-links">
+                <a href="https://instagram.com/oduwaiam" target="_blank">Instagram</a>
+                <a href="https://twitter.com/oduwaiam" target="_blank">Twitter</a>
+                <a href="https://tiktok.com/@oduwaiam" target="_blank">TikTok</a>
+            </div>
+
             <button class="btn-close" onclick="closePortal('booking-portal')">Back</button>
         </div>
     </div>
@@ -348,8 +362,11 @@
                 </button>
                 <div id="ai-motto-output" class="ai-output" style="text-align:center; font-family: var(--font-main); color: #fff; border:none; font-size: 1.2rem; display:none;"></div>
             </div>
-            <input type="email" placeholder="Email Address" id="join-email">
-            <button class="btn-action" style="margin-top:20px" onclick="subscribeNewsletter()">SUBSCRIBE</button>
+            <div class="portal-section">
+                <label class="section-label">Email Address</label>
+                <input type="email" placeholder="your@email.com" id="join-email">
+            </div>
+            <button class="btn-action" style="margin-top:10px" onclick="subscribeNewsletter()">SUBSCRIBE</button>
             <button class="btn-close" onclick="closePortal('join-portal')">Back</button>
         </div>
     </div>
@@ -362,6 +379,11 @@
                 <p>Oduwa, the Nigerian-born Afrobeat virtuoso, commands attention with a style that exudes opulence and artistry. From humble beginnings at age 11, creating custom ringtones on his uncle’s phone, Oduwa's journey has been one of discovery and mastery.</p>
                 <p>His sound blends the timeless rhythms of Afrobeat with sleek, contemporary vibrations—creating a soundscape that is as luxurious as it is unforgettable.</p>
                 <p>With the release of his EP “INFLECTION”, Oduwa redefines Afrobeat, imbuing his music with playful sophistication and engaging energy.</p>
+            </div>
+            <div class="social-links">
+                <a href="https://instagram.com/oduwaiam" target="_blank">Instagram</a>
+                <a href="https://twitter.com/oduwaiam" target="_blank">Twitter</a>
+                <a href="https://tiktok.com/@oduwaiam" target="_blank">TikTok</a>
             </div>
             <button class="btn-close" onclick="closePortal('bio-portal')">Back</button>
         </div>
@@ -519,13 +541,14 @@
         }
 
         function subscribeNewsletter() {
-            const email = document.getElementById('join-email').value;
+            const emailInput = document.getElementById('join-email');
+            const email = emailInput.value;
             if(!email || !email.includes('@')) {
                 showToast("Please enter a valid email.");
                 return;
             }
             showToast("Welcome to The Tribe!");
-            document.getElementById('join-email').value = '';
+            emailInput.value = '';
             setTimeout(() => closePortal('join-portal'), 1500);
         }
 
