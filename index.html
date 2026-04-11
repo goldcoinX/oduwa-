@@ -170,7 +170,9 @@
                 top: 30px;
                 left: 50%;
                 transform: translateX(-50%);
-                font-size: 2.8rem;
+                font-size: clamp(1.5rem, 11vw, 2.2rem);
+                width: 100%;
+                text-align: center;
                 z-index: 100;
                 border: none;
                 background: transparent;
@@ -191,7 +193,17 @@
             }
             .portal-card { padding: 30px 20px; }
             .gallery-grid { grid-template-columns: 1fr !important; }
-            .floating-socials { bottom: auto; top: 30px; right: 20px; flex-direction: row; }
+            .floating-socials { 
+                position: relative; 
+                bottom: auto; 
+                top: auto; 
+                right: auto; 
+                flex-direction: row; 
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 10px;
+                z-index: 50;
+            }
         }
 
         .gallery-grid {
@@ -616,22 +628,11 @@
             const system = "You are a branding expert for the artist Oduwa.";
             
             const result = await callGemini(prompt, system);
-            output.innerText = `✨ "${result.trim().replace(/["']/g, "")}"`;
+            output.innerText = result;
             
-            btn.innerText = "✨ GENERATE NEW MOTTO";
+            btn.innerText = "✨ GENERATE TRIBE MOTTO";
             btn.disabled = false;
         }
-
-        window.onload = function() {
-            setTimeout(() => { showToast("Join The Tribe!"); }, 3000);
-        };
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none');
-                document.body.style.overflow = 'auto';
-            }
-        });
     </script>
 </body>
 </html>
