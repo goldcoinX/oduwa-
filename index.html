@@ -21,233 +21,163 @@
         }
 
         body, html {
-            margin: 0; padding: 0; width: 100%; min-height: 100%;
+            margin: 0; padding: 0; width: 100%;
             background-color: var(--bg-color); color: var(--text-color);
-            font-family: var(--font-body); overflow-x: hidden;
+            font-family: var(--font-body);
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            overflow-y: auto;
+            scroll-behavior: smooth;
         }
 
-        .container { position: relative; width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .hero-wrapper { position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; z-index: 1; }
+        .container { 
+            position: relative; 
+            width: 100%; 
+            min-height: 160vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        
+        .hero-wrapper { 
+            position: fixed; 
+            top: 0; left: 0; 
+            height: 100vh; width: 100vw; 
+            z-index: 1; 
+            pointer-events: none;
+        }
         .hero-figure { 
             height: 100%; width: 100%; object-fit: cover; filter: brightness(0.6); 
             background-color: #111;
         }
 
-        nav { position: relative; width: 100%; height: 100vh; z-index: 10; }
+        nav { 
+            position: relative; 
+            width: 100%; 
+            height: 100vh; 
+            z-index: 10; 
+        }
+        
         nav a {
             position: absolute; text-decoration: none; color: var(--accent); font-family: var(--font-main);
-            font-weight: 700; font-size: clamp(0.9rem, 1.8vw, 1.3rem); transition: var(--transition);
-            cursor: pointer; opacity: 0; display: flex; align-items: center; white-space: nowrap; gap: 8px;
-            text-shadow: 2px 2px 15px rgba(0,0,0,0.8); 
+            font-weight: 700; font-size: clamp(14px, 4vw, 22px); transition: var(--transition);
+            cursor: pointer; opacity: 0; display: flex; align-items: center; white-space: nowrap; gap: 6px;
+            text-shadow: 0px 4px 15px rgba(0,0,0,1); 
             animation: revealText 1.5s forwards, uniformFloat 5s ease-in-out infinite alternate;
             letter-spacing: 0.05em; text-transform: uppercase;
         }
 
-        nav a:hover {
-            color: #b3b3b3;
-            transform: scale(1.05);
+        nav a:hover { color: #aaa; transform: scale(1.05); }
+
+        .nav-inflection { 
+            top: 10%; left: 5%; 
+            font-size: clamp(50px, 15vw, 140px); 
+            z-index: 50; letter-spacing: -0.04em; font-weight: 800; 
+            animation: revealText 1.5s forwards; 
+            text-shadow: 0px 10px 40px rgba(0,0,0,0.7);
         }
+        
+        .nav-video { top: 35%; left: 10%; }
+        .nav-booking { top: 33%; left: 32%; }
+        .nav-bio { top: 31%; left: 54%; }
+        .nav-tour { top: 33%; right: 10%; }
 
-        .nav-inflection { top: 6%; left: 50%; transform: translateX(-50%); font-size: clamp(2.5rem, 10vw, 7.5rem); z-index: 50; letter-spacing: -0.04em; font-weight: 800; animation: revealText 1.5s forwards; }
-        
-        .nav-booking { top: 32%; left: 30%; }
-        .nav-bio { top: 30%; left: 50%; transform: translateX(-50%); }  
-        
-        .nav-video { top: 35%; left: 12%; }
-        .nav-tour { top: 32%; right: 15%; }
-        .nav-merch { top: 55%; left: 8%; }
-        .nav-music { top: 55%; right: 8%; }
-        .nav-gallery { bottom: 18%; left: 15%; }
-        .nav-join { bottom: 18%; right: 15%; }
+        .nav-merch { top: 58%; left: 8%; }
+        .nav-music { top: 58%; right: 8%; }
 
-        .bling { display: inline-block; font-size: 0.5em; color: var(--text-color); animation: blingScale 2.2s infinite; opacity: 0.6; }
+        .nav-gallery { bottom: 15%; left: 15%; }
+        .nav-join { bottom: 15%; right: 15%; }
+
+        .bling { display: inline-block; font-size: 0.6em; color: var(--text-color); animation: blingScale 2.2s infinite; opacity: 0.8; }
         
-        @keyframes blingScale { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 0.9; } }
+        @keyframes blingScale { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.3); opacity: 1; } }
         @keyframes uniformFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
         @keyframes revealText { from { opacity: 0; } to { opacity: 1; } }
 
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.97); z-index: 1000; display: none;
+            background: rgba(0, 0, 0, 0.98); z-index: 1000; display: none;
             flex-direction: column; justify-content: center; align-items: center;
-            padding: 20px; backdrop-filter: blur(30px);
+            padding: 20px; backdrop-filter: blur(40px);
         }
 
         .portal-card {
-            background: var(--portal-bg); padding: 50px; border-radius: 4px;
-            max-width: 700px; width: 100%; position: relative;
+            background: var(--portal-bg); padding: 40px 30px; border-radius: 4px;
+            max-width: 600px; width: 100%; position: relative;
             border: 1px solid var(--border-color); box-shadow: 0 30px 60px rgba(0,0,0,0.8);
             max-height: 85vh; overflow-y: auto;
             box-sizing: border-box;
         }
 
-        .portal-card::-webkit-scrollbar { width: 6px; }
-        .portal-card::-webkit-scrollbar-track { background: var(--portal-bg); }
-        .portal-card::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-
-        .portal-title { font-family: var(--font-main); font-size: 2rem; color: var(--accent); margin-top: 0; margin-bottom: 30px; text-align: center; text-transform: uppercase; }
-        .portal-section { margin-bottom: 24px; }
-        .section-label { display: block; margin-bottom: 10px; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em; color: #888; text-transform: uppercase; }
+        .portal-title { font-family: var(--font-main); font-size: 1.8rem; color: var(--accent); margin-top: 0; margin-bottom: 25px; text-align: center; text-transform: uppercase; }
+        .portal-section { margin-bottom: 20px; }
+        .section-label { display: block; margin-bottom: 8px; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.15em; color: #888; text-transform: uppercase; }
 
         input, textarea, select {
-            width: 100%; padding: 16px; border: 1px solid #333; background: #000; color: #fff;
+            width: 100%; padding: 14px; border: 1px solid #222; background: #000; color: #fff;
             font-family: var(--font-body); box-sizing: border-box; font-size: 14px;
-            transition: border-color 0.3s;
         }
-        input:focus, textarea:focus { outline: none; border-color: #666; }
 
         .btn-action { 
-            background: #fff; color: #000; border: none; padding: 18px 25px; cursor: pointer;
+            background: #fff; color: #000; border: none; padding: 166px; padding: 16px; cursor: pointer;
             font-family: var(--font-main); font-weight: 700; width: 100%; text-transform: uppercase; 
-            letter-spacing: 0.1em; transition: 0.3s;
+            letter-spacing: 0.1em; margin-top: 10px;
         }
-        .btn-action:hover { background: #ccc; }
         
-        .btn-gemini {
-            background: linear-gradient(90deg, #4285f4, #9b72cb); color: #fff; margin-bottom: 15px;
-            display: flex; align-items: center; justify-content: center; gap: 8px; border: none;
-            transition: opacity 0.3s;
+        .btn-close { margin-top: 20px; background: none; border: none; font-size: 0.65rem; cursor: pointer; color: #444; width: 100%; text-transform: uppercase; letter-spacing: 0.2em; }
+
+        .cart-status {
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 4px; margin-top: 20px;
+            border: 1px dashed #333; font-size: 0.8rem;
         }
-        .btn-gemini:hover { background: linear-gradient(90deg, #4285f4, #9b72cb); opacity: 0.9; }
-
-        .ai-output {
-            background: #111; border-left: 3px solid #4285f4; padding: 15px;
-            font-size: 0.85rem; color: #aaa; margin: 15px 0; display: none;
-            font-style: italic; line-height: 1.6; white-space: pre-wrap;
-        }
-
-        .btn-close { margin-top: 30px; background: none; border: none; font-size: 0.7rem; cursor: pointer; color: #666; width: 100%; text-transform: uppercase; letter-spacing: 0.2em; padding: 15px 0; }
-        .btn-close:hover { color: #fff; }
-        
-        .merch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 30px; }
-        .merch-item { text-align: center; }
-        .merch-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border: 1px solid #222; margin-bottom: 10px; }
-        .merch-info { margin-bottom: 15px; font-size: 0.85rem; color: #ccc; }
-        .btn-cart { background: transparent; border: 1px solid #444; color: #fff; padding: 10px; width: 100%; cursor: pointer; font-size: 0.6rem; letter-spacing: 0.1em; transition: 0.3s; }
-        .btn-cart:hover { background: #fff; color: #000; }
-
-        .cart-summary { background: #000; border: 1px solid #222; padding: 20px; margin-top: 30px; }
-        .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #111; font-size: 0.75rem; color: #ddd;}
+        .cart-item-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
 
         .toast-message {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
-            background: #fff; color: #000; padding: 15px 30px; z-index: 2000;
+            background: #fff; color: #000; padding: 12px 24px; z-index: 2000;
             font-family: var(--font-main); font-weight: 800; text-transform: uppercase;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-            opacity: 0; pointer-events: none; text-align: center; max-width: 90vw;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            opacity: 0; pointer-events: none; text-align: center; font-size: 0.75rem;
         }
         .toast-message.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        footer { position: relative; padding: 40px 0 20px; width: 100%; display: flex; flex-direction: column; align-items: center; z-index: 40; font-size: 0.65rem; opacity: 0.6; }
-        .footer-email { text-decoration: none; color: #fff; margin-bottom: 6px; }
-        .footer-email:hover { text-decoration: underline; }
+        .scroll-footer-area {
+            position: relative; z-index: 10; width: 100%; height: 60vh;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            align-items: center; padding-bottom: 40px;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.9));
+        }
+        footer { text-align: center; opacity: 0.6; }
+        .footer-email { text-decoration: none; color: #fff; display: block; margin-bottom: 10px; font-weight: 600; }
 
-        .bio-content p { color: #bbb; line-height: 1.8; margin-bottom: 20px; font-size: 0.95rem; }
+        .floating-socials { position: fixed; top: 30px; right: 20px; z-index: 500; display: flex; gap: 15px; }
+        .floating-socials a { color: #fff; opacity: 0.5; text-decoration: none; font-size: 0.75rem; font-weight: 700; transition: 0.3s; }
+        .floating-socials a:hover { opacity: 1; }
 
-        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
-        .social-links a { color: #fff; text-decoration: none; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; transition: 0.3s; }
-        .social-links a:hover { opacity: 1; }
-
-        .floating-socials { position: fixed; bottom: 30px; right: 30px; z-index: 500; display: flex; flex-direction: column; gap: 15px; }
-        .floating-socials a { color: #fff; opacity: 0.5; transition: 0.3s; text-decoration: none; font-size: 1.2rem; }
-        .floating-socials a:hover { opacity: 1; transform: translateX(-5px); }
-
-        @media (max-width: 768px) {
-            .container { padding-top: 0; }
-            
-            /* Disabled mobile list view to match desktop view 
-            nav { 
-                height: auto; 
-                display: flex; 
-                flex-direction: column; 
-                align-items: center; 
-                padding-top: 130px; 
-                gap: 12px;
-                padding-bottom: 40px;
-                min-height: 100vh;
-            }
-            */
-
-            .nav-inflection {
-                /* position: fixed;
-                top: 30px;
-                left: 50%;
-                transform: translateX(-50%);
-                z-index: 100;
-                border: none;
-                background: transparent;
-                padding: 0;
-                animation: revealText 1.5s forwards !important; */
-                
-                /* Keeping only the scaling text for mobile so it fits */
-                font-size: clamp(1.5rem, 11vw, 2.2rem);
-                width: 100%;
-                text-align: center;
-            }
-
-            /* Disabled mobile list view to match desktop view
-            nav a:not(.nav-inflection) {
-                position: static;
-                width: 80%;
-                max-width: 350px;
-                justify-content: center;
-                border: 1px solid rgba(255,255,255,0.15);
-                padding: 16px 10px;
-                transform: none !important;
-                animation: revealText 1s forwards !important;
-                background: rgba(0,0,0,0.4);
-                backdrop-filter: blur(5px);
-            }
-            */
-
-            .portal-card { padding: 30px 20px; }
-            .gallery-grid { grid-template-columns: 1fr !important; }
-            .floating-socials { 
-                position: relative; 
-                bottom: auto; 
-                top: auto; 
-                right: auto; 
-                flex-direction: row; 
-                justify-content: center;
-                width: 100%;
-                margin-bottom: 10px;
-                z-index: 50;
-            }
+        @media (max-width: 600px) {
+            .nav-inflection { top: 12%; left: 5%; font-size: 56px; }
+            nav a { font-size: 14px; }
+            .nav-video { top: 34%; left: 8%; }
+            .nav-booking { top: 32%; left: 34%; }
+            .nav-bio { top: 30%; left: 58%; }
+            .nav-tour { top: 32%; right: 8%; }
+            .nav-merch { top: 56%; left: 5%; }
+            .nav-music { top: 56%; right: 5%; }
+            .nav-gallery { bottom: 18%; left: 10%; }
+            .nav-join { bottom: 18%; right: 10%; }
         }
 
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+        .disco-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
+        .disco-item { text-align: center; text-decoration: none; cursor: pointer; }
+        .disco-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border: 1px solid #222; margin-bottom: 6px; }
+        .disco-title { font-size: 0.65rem; color: #fff; font-family: var(--font-main); text-transform: uppercase; }
+        
+        .scroll-indicator {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.4;
+            animation: scrollPulse 2s infinite;
         }
-        .gallery-img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
-            border: 1px solid #222;
-        }
-        .tour-date {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px 0;
-            border-bottom: 1px solid #222;
-            font-size: 0.85rem;
-            color: #ddd;
-        }
-        .tour-date span:last-child {
-            font-weight: bold;
-            color: #fff;
-            cursor: pointer;
-            font-family: var(--font-main);
-        }
-        .tour-date span:last-child:hover { text-decoration: underline; }
-
-        .disco-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; margin-top: 20px; }
-        .disco-item { text-align: center; text-decoration: none; display: block; transition: transform 0.3s; }
-        .disco-item:hover { transform: scale(1.05); }
-        .disco-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border: 1px solid #222; border-radius: 4px; margin-bottom: 10px; }
-        .disco-title { font-size: 0.75rem; color: #fff; font-family: var(--font-main); text-transform: uppercase; letter-spacing: 0.05em; }
+        @keyframes scrollPulse { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }
     </style>
 </head>
 <body>
@@ -261,27 +191,34 @@
 
         <nav>
             <a href="https://unitedmasters.com/m/inflection" target="_blank" class="nav-inflection">INFLECTION</a>
+            
             <a href="https://www.youtube.com/@ODUWAIAM?sub_confirmation=1" target="_blank" class="nav-video">VIDEO <span class="bling">●</span></a>
             <a onclick="openPortal('booking-portal')" class="nav-booking">BOOKING <span class="bling">●</span></a>
             <a onclick="openPortal('bio-portal')" class="nav-bio">BIO <span class="bling">●</span></a>
-            <a onclick="openPortal('merch-portal')" class="nav-merch">MERCH <span class="bling">●</span></a>
-            <a onclick="openPortal('gallery-portal')" class="nav-gallery">GALLERY <span class="bling">●</span></a>
             <a onclick="openPortal('tour-portal')" class="nav-tour">TOUR <span class="bling">●</span></a>
+
+            <a onclick="openPortal('merch-portal')" class="nav-merch">MERCH <span class="bling">●</span></a>
             <a onclick="openPortal('music-portal')" class="nav-music">MUSIC <span class="bling">●</span></a>
+
+            <a onclick="openPortal('gallery-portal')" class="nav-gallery">GALLERY <span class="bling">●</span></a>
             <a onclick="openPortal('join-portal')" class="nav-join">JOIN <span class="bling">●</span></a>
+
+            <div class="scroll-indicator">Scroll Down</div>
         </nav>
 
+        <div class="scroll-footer-area">
+            <footer>
+                <a href="mailto:Info@oduwaiam.com" class="footer-email">Info@oduwaiam.com</a>
+                <div style="letter-spacing: 0.1em; font-size: 0.6rem;">&copy; ODUWA 2026 | ALL RIGHTS RESERVED</div>
+            </footer>
+        </div>
+
         <div class="floating-socials">
+            <a href="https://www.youtube.com/@ODUWAIAM?sub_confirmation=1" target="_blank">YT</a>
             <a href="https://instagram.com/oduwaiam" target="_blank">IG</a>
             <a href="https://twitter.com/oduwaiam" target="_blank">X</a>
             <a href="https://tiktok.com/@oduwaiam" target="_blank">TK</a>
-            <a href="https://youtube.com/@ODUWAIAM" target="_blank">YT</a>
         </div>
-
-        <footer>
-            <a href="mailto:Info@oduwaiam.com" class="footer-email">Info@oduwaiam.com</a>
-            <div>&copy; ODUWA 2026 | INFLECTION SEASON</div>
-        </footer>
     </div>
 
     <div id="app-toast" class="toast-message"></div>
@@ -318,94 +255,48 @@
                         <option>$100k-$1m</option>
                     </select>
                 </div>
-                <div class="portal-section">
-                    <label class="section-label">Message / Details</label>
-                    <textarea id="booking-details" placeholder="Additional details..." rows="3"></textarea>
-                </div>
-                
-                <button type="submit" class="btn-action">SUBMIT INQUIRY</button>
+                <button type="submit" class="btn-action">SEND INQUIRY</button>
             </form>
-
-            <div style="margin-top: 40px; border-top: 1px solid #222; padding-top: 20px;">
-                <button class="btn-action btn-gemini" id="btn-ai-booking" onclick="refineBooking()">
-                    ✨ AI REFINE REQUEST
-                </button>
-                <div id="ai-booking-output" class="ai-output"></div>
-            </div>
-
-            <div class="social-links">
-                <a href="https://instagram.com/oduwaiam" target="_blank">Instagram</a>
-                <a href="https://twitter.com/oduwaiam" target="_blank">Twitter</a>
-                <a href="https://tiktok.com/@oduwaiam" target="_blank">TikTok</a>
-            </div>
-
-            <button class="btn-close" onclick="closePortal('booking-portal')">Back</button>
+            <button class="btn-close" onclick="closePortal('booking-portal')">Close</button>
         </div>
     </div>
 
     <!-- Merch Portal -->
     <div id="merch-portal" class="overlay">
         <div class="portal-card">
-            <h2 class="portal-title">Collection</h2>
-            <div class="merch-grid">
-                <div class="merch-item">
-                    <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&q=80&w=400" class="merch-img" alt="Tee">
-                    <div class="merch-info">Inflection Essential Tee • $45</div>
-                    <button class="btn-cart" onclick="addToCart('Inflection Essential Tee', 45)">ADD TO CART</button>
+            <h2 class="portal-title">Merch</h2>
+            <div class="disco-grid">
+                <div class="disco-item" onclick="addToCart('Inflection Tee', 45)">
+                    <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=300" class="disco-img">
+                    <div class="disco-title">Inflection Tee • $45</div>
                 </div>
-                <div class="merch-item">
-                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=400" class="merch-img" alt="Hoodie">
-                    <div class="merch-info">Monochrome Studio Hoodie • $85</div>
-                    <button class="btn-cart" onclick="addToCart('Monochrome Studio Hoodie', 85)">ADD TO CART</button>
+                <div class="disco-item" onclick="addToCart('Studio Hoodie', 85)">
+                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=300" class="disco-img">
+                    <div class="disco-title">Studio Hoodie • $85</div>
                 </div>
+            </div>
+            
+            <div id="cart-display" class="cart-status" style="display:none;">
+                <div class="section-label">Your Cart</div>
+                <div id="cart-items"></div>
+                <div style="border-top: 1px solid #333; margin-top: 10px; padding-top:10px; font-weight:700; display:flex; justify-content:space-between;">
+                    <span>TOTAL</span><span id="cart-total">$0</span>
+                </div>
+                <button class="btn-action" onclick="showToast('Checkout simulated'); emptyCart();">CHECKOUT</button>
             </div>
 
-            <div id="cart-display" class="cart-summary" style="display: none;">
-                <label class="section-label">Cart</label>
-                <div id="cart-items-list"></div>
-                <button class="btn-action btn-gemini" id="btn-ai-style" onclick="getStylingAdvice()" style="margin-top: 15px;">
-                    ✨ GET STYLING ADVICE
-                </button>
-                <div id="ai-style-output" class="ai-output"></div>
-                <div style="margin-top:15px; text-align:right; font-weight:800; font-family:var(--font-main);" id="cart-total-display"></div>
-                <button class="btn-action" style="margin-top:20px" onclick="checkout()">CHECKOUT</button>
-            </div>
             <button class="btn-close" onclick="closePortal('merch-portal')">Back</button>
-        </div>
-    </div>
-
-    <!-- Join Portal -->
-    <div id="join-portal" class="overlay">
-        <div class="portal-card">
-            <h2 class="portal-title">Join The Tribe</h2>
-            <div class="portal-section">
-                <button class="btn-action btn-gemini" id="btn-ai-motto" onclick="generateMotto()">
-                    ✨ GENERATE TRIBE MOTTO
-                </button>
-                <div id="ai-motto-output" class="ai-output" style="text-align:center; font-family: var(--font-main); color: #fff; border:none; font-size: 1.2rem; display:none;"></div>
-            </div>
-            <div class="portal-section">
-                <label class="section-label">Email Address</label>
-                <input type="email" placeholder="your@email.com" id="join-email">
-            </div>
-            <button class="btn-action" style="margin-top:10px" onclick="subscribeNewsletter()">SUBSCRIBE</button>
-            <button class="btn-close" onclick="closePortal('join-portal')">Back</button>
         </div>
     </div>
 
     <!-- Bio Portal -->
     <div id="bio-portal" class="overlay">
         <div class="portal-card">
-            <h2 class="portal-title">The Artist</h2>
-            <div id="artist-bio-text" class="bio-content">
-                <p>Oduwa, the Nigerian-born Afrobeat virtuoso, commands attention with a style that exudes opulence and artistry. From humble beginnings at age 11, creating custom ringtones on his uncle’s phone, Oduwa's journey has been one of discovery and mastery.</p>
-                <p>His sound blends the timeless rhythms of Afrobeat with sleek, contemporary vibrations—creating a soundscape that is as luxurious as it is unforgettable.</p>
-                <p>With the release of his EP “INFLECTION”, Oduwa redefines Afrobeat, imbuing his music with playful sophistication and engaging energy.</p>
-            </div>
-            <div class="social-links">
-                <a href="https://instagram.com/oduwaiam" target="_blank">Instagram</a>
-                <a href="https://twitter.com/oduwaiam" target="_blank">Twitter</a>
-                <a href="https://tiktok.com/@oduwaiam" target="_blank">TikTok</a>
+            <h2 class="portal-title">Biography</h2>
+            <div style="font-size: 0.9rem; line-height: 1.7; color: #ccc;">
+                <p><strong>ODUWA</strong> is more than an artist; he is a sonic architect. Born in Nigeria and raised within the vibrant polyrhythms of Afrobeat, Oduwa has spent years meticulously crafting a sound that bridges the gap between raw street energy and high-fashion luxury.</p>
+                <p>His latest project, <em>INFLECTION</em>, represents a turning point in his career—a moment of pure creative clarity where traditional drums meet futuristic synths. Known for his captivating stage presence and "sonic bling," Oduwa continues to push the boundaries of what African music can be in a global context.</p>
+                <p>2026 marks the beginning of the Inflection World Tour, bringing the vision to every corner of the globe.</p>
             </div>
             <button class="btn-close" onclick="closePortal('bio-portal')">Back</button>
         </div>
@@ -415,7 +306,6 @@
     <div id="music-portal" class="overlay">
         <div class="portal-card">
             <h2 class="portal-title">Discography</h2>
-            
             <div class="disco-grid">
                 <a href="https://unitedmasters.com/m/inflection" target="_blank" class="disco-item">
                     <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/INFLECTION.png" class="disco-img" alt="INFLECTION">
@@ -442,207 +332,80 @@
                     <div class="disco-title">SAPA</div>
                 </a>
             </div>
-
             <button class="btn-close" onclick="closePortal('music-portal')">Back</button>
         </div>
     </div>
 
-    <!-- Gallery Portal -->
+    <div id="tour-portal" class="overlay">
+        <div class="portal-card">
+            <h2 class="portal-title">World Tour</h2>
+            <div style="font-size: 0.8rem;">
+                <div style="border-bottom: 1px solid #222; padding: 15px 0; display:flex; justify-content:space-between;"><span>LAGOS • EKO HOTEL</span><span>MAY 12</span></div>
+                <div style="border-bottom: 1px solid #222; padding: 15px 0; display:flex; justify-content:space-between;"><span>LONDON • O2 ACADEMY</span><span>JUN 03</span></div>
+                <div style="border-bottom: 1px solid #222; padding: 15px 0; display:flex; justify-content:space-between;"><span>NYC • MADISON SQ GARDEN</span><span>JUL 15</span></div>
+            </div>
+            <button class="btn-close" onclick="closePortal('tour-portal')">Back</button>
+        </div>
+    </div>
+
     <div id="gallery-portal" class="overlay">
         <div class="portal-card">
-            <h2 class="portal-title">Visual Diary</h2>
-            <div class="gallery-grid">
-                <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&auto=format&fit=crop&q=80" class="gallery-img" alt="Performance">
-                <img src="https://images.unsplash.com/photo-1501612780327-45045538702b?w=400&auto=format&fit=crop&q=80" class="gallery-img" alt="Studio">
-                <img src="https://images.unsplash.com/photo-1493225458580-43e1e35dac78?w=400&auto=format&fit=crop&q=80" class="gallery-img" alt="Live">
-                <img src="https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=400&auto=format&fit=crop&q=80" class="gallery-img" alt="Portrait">
+            <h2 class="portal-title">Visuals</h2>
+            <div class="disco-grid">
+                <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300" class="disco-img">
+                <img src="https://images.unsplash.com/photo-1501612780327-45045538702b?w=300" class="disco-img">
+                <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300" class="disco-img">
+                <img src="https://images.unsplash.com/photo-1459749411177-042180ce673c?w=300" class="disco-img">
             </div>
             <button class="btn-close" onclick="closePortal('gallery-portal')">Back</button>
         </div>
     </div>
 
-    <!-- Tour Portal -->
-    <div id="tour-portal" class="overlay">
+    <div id="join-portal" class="overlay">
         <div class="portal-card">
-            <h2 class="portal-title">Upcoming Shows</h2>
-            <div class="tour-date"><span>LAGOS, NG</span><span>MAY 12</span><span onclick="showToast('Tickets dropping soon!')">TICKETS</span></div>
-            <div class="tour-date"><span>LONDON, UK</span><span>JUN 03</span><span onclick="showToast('Tickets dropping soon!')">TICKETS</span></div>
-            <div class="tour-date"><span>NEW YORK, NY</span><span>JUN 21</span><span onclick="showToast('Tickets dropping soon!')">TICKETS</span></div>
-            <div class="tour-date"><span>ACCRA, GH</span><span>JUL 08</span><span onclick="showToast('Tickets dropping soon!')">TICKETS</span></div>
-            <button class="btn-close" onclick="closePortal('tour-portal')">Back</button>
+            <h2 class="portal-title">Join Tribe</h2>
+            <div class="portal-section"><label class="section-label">Email</label><input type="email" placeholder="your@email.com" id="join-email"></div>
+            <button class="btn-action" onclick="showToast('Subscribed'); closePortal('join-portal');">SUBSCRIBE</button>
+            <button class="btn-close" onclick="closePortal('join-portal')">Back</button>
         </div>
     </div>
 
     <script>
-        const apiKey = ""; 
-
-        async function callGemini(promptText, systemPromptText) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            const payload = {
-                contents: [{ parts: [{ text: promptText }] }],
-                systemInstruction: { parts: [{ text: systemPromptText }] }
-            };
-
-            const delays = [1000, 2000, 4000, 8000, 16000];
-            
-            for (let i = 0; i < 5; i++) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    const data = await response.json();
-                    if (!response.ok) throw new Error(data.error?.message || 'API Error');
-                    
-                    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (text) return text;
-                    throw new Error("Invalid response format");
-                } catch (e) {
-                    if (i < 4) {
-                        await new Promise(resolve => setTimeout(resolve, delays[i]));
-                    } else {
-                        return "Network Error. Our AI is currently taking a creative break. Please try again later.";
-                    }
-                }
-            }
+        let cart = [];
+        function showToast(msg) {
+            const t = document.getElementById('app-toast');
+            t.innerText = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
         }
-
-        let toastTimeout;
-        function showToast(message, duration = 3500) {
-            const toast = document.getElementById('app-toast');
-            toast.innerText = message;
-            toast.classList.add('show');
-            
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, duration);
-        }
-
         function openPortal(id) { 
             document.getElementById(id).style.display = 'flex'; 
-            document.body.style.overflow = 'hidden'; 
+            document.body.style.overflow = 'hidden';
         }
-        
         function closePortal(id) { 
             document.getElementById(id).style.display = 'none'; 
-            document.body.style.overflow = 'auto'; 
+            document.body.style.overflow = 'auto';
         }
-
-        let cart = [];
-
         function addToCart(name, price) {
             cart.push({name, price});
             updateCartUI();
-            showToast(`${name} added to cart!`);
+            showToast(`Added ${name} to Cart`);
         }
-
         function updateCartUI() {
-            const list = document.getElementById('cart-items-list');
             const display = document.getElementById('cart-display');
-            const totalDisplay = document.getElementById('cart-total-display');
-            
-            if (cart.length > 0) {
-                display.style.display = 'block';
-                list.innerHTML = cart.map(i => `<div class="cart-item"><span>${i.name}</span><span>$${i.price}</span></div>`).join('');
-                totalDisplay.innerText = `TOTAL: $${cart.reduce((a,b) => a + b.price, 0)}`;
-            } else {
-                display.style.display = 'none';
-            }
+            const items = document.getElementById('cart-items');
+            const total = document.getElementById('cart-total');
+            if (cart.length === 0) { display.style.display = 'none'; return; }
+            display.style.display = 'block';
+            items.innerHTML = cart.map(i => `<div class="cart-item-row"><span>${i.name}</span><span>$${i.price}</span></div>`).join('');
+            const sum = cart.reduce((a, b) => a + b.price, 0);
+            total.innerText = `$${sum}`;
         }
-
-        function checkout() {
-            if (cart.length === 0) return;
-            const total = cart.reduce((a,b) => a + b.price, 0);
-            showToast(`Thank you for your order! Total: $${total}`);
+        function emptyCart() {
             cart = [];
             updateCartUI();
-            document.getElementById('ai-style-output').style.display = 'none';
+            closePortal('merch-portal');
         }
-
-        function subscribeNewsletter() {
-            const emailInput = document.getElementById('join-email');
-            const email = emailInput.value;
-            if(!email || !email.includes('@')) {
-                showToast("Please enter a valid email.");
-                return;
-            }
-            showToast("Welcome to The Tribe!");
-            emailInput.value = '';
-            setTimeout(() => closePortal('join-portal'), 1500);
-        }
-
-        async function refineBooking() {
-            const details = document.getElementById('booking-details').value;
-            const location = document.getElementById('booking-location').value;
-            const output = document.getElementById('ai-booking-output');
-            const btn = document.getElementById('btn-ai-booking');
-            
-            const context = details + (location ? ` in ${location}` : "");
-
-            if (!context) {
-                output.style.display = 'block';
-                output.innerText = 'Please enter some details first.';
-                return;
-            }
-
-            btn.innerText = "✨ ANALYZING...";
-            btn.disabled = true;
-            output.style.display = 'block';
-            output.innerText = "Gemini is calculating artist requirements...";
-
-            const prompt = `A user wants to book Oduwa for: "${context}". Provide a brief, professional suggestion of: 1. Ideal set length. 2. One specific lighting/visual requirement to match the 'luxury' vibe. 3. A hospitality tip. format nicely with bullet points.`;
-            const system = "You are Oduwa's AI Booking Manager. Keep it sleek, professional, and luxurious. Format your response clearly.";
-            
-            const result = await callGemini(prompt, system);
-            output.innerText = result;
-            
-            btn.innerText = "✨ REFINE REQUEST";
-            btn.disabled = false;
-        }
-
-        async function getStylingAdvice() {
-            const items = cart.map(i => i.name).join(", ");
-            const output = document.getElementById('ai-style-output');
-            const btn = document.getElementById('btn-ai-style');
-
-            if (cart.length === 0) return;
-
-            btn.innerText = "✨ STYLING...";
-            btn.disabled = true;
-            output.style.display = 'block';
-            output.innerText = "Curating your look...";
-
-            const prompt = `The fan has these items in their cart: ${items}. Suggest a high-fashion accessory or pair of shoes (generic description) that would complete an 'Oduwa-style' outfit for a concert. Keep it under 40 words.`;
-            const system = "You are Oduwa's Creative Director. Your tone is high-fashion and sophisticated.";
-            
-            const result = await callGemini(prompt, system);
-            output.innerText = `✨ ${result}`;
-            
-            btn.innerText = "✨ GET STYLING ADVICE";
-            btn.disabled = false;
-        }
-
-        async function generateMotto() {
-            const output = document.getElementById('ai-motto-output');
-            const btn = document.getElementById('btn-ai-motto');
-            
-            btn.innerText = "✨ GENERATING...";
-            btn.disabled = true;
-            output.style.display = 'block';
-            output.innerText = "Crafting words...";
-
-            const prompt = "Generate a short, powerful 3-4 word motto for Oduwa's fan group 'The Tribe'. It should feel luxurious, Afrocentric, and energetic like the album 'INFLECTION'. Give me ONLY the motto text, no quotes or intro.";
-            const system = "You are a branding expert for the artist Oduwa.";
-            
-            const result = await callGemini(prompt, system);
-            output.innerText = result;
-            
-            btn.innerText = "✨ GENERATE TRIBE MOTTO";
-            btn.disabled = false;
-        }
+        window.onload = () => setTimeout(() => showToast("Inflection Season"), 1500);
     </script>
 </body>
 </html>
