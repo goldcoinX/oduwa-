@@ -155,6 +155,8 @@
 
         @media (max-width: 768px) {
             .container { padding-top: 0; }
+            
+            /* Disabled mobile list view to match desktop view 
             nav { 
                 height: auto; 
                 display: flex; 
@@ -165,20 +167,26 @@
                 padding-bottom: 40px;
                 min-height: 100vh;
             }
+            */
+
             .nav-inflection {
-                position: fixed;
+                /* position: fixed;
                 top: 30px;
                 left: 50%;
                 transform: translateX(-50%);
-                font-size: clamp(1.5rem, 11vw, 2.2rem);
-                width: 100%;
-                text-align: center;
                 z-index: 100;
                 border: none;
                 background: transparent;
                 padding: 0;
-                animation: revealText 1.5s forwards !important;
+                animation: revealText 1.5s forwards !important; */
+                
+                /* Keeping only the scaling text for mobile so it fits */
+                font-size: clamp(1.5rem, 11vw, 2.2rem);
+                width: 100%;
+                text-align: center;
             }
+
+            /* Disabled mobile list view to match desktop view
             nav a:not(.nav-inflection) {
                 position: static;
                 width: 80%;
@@ -191,6 +199,8 @@
                 background: rgba(0,0,0,0.4);
                 backdrop-filter: blur(5px);
             }
+            */
+
             .portal-card { padding: 30px 20px; }
             .gallery-grid { grid-template-columns: 1fr !important; }
             .floating-socials { 
