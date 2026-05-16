@@ -2,19 +2,45 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Oduwa | INFLECTION</title>
-    
-    <!-- Import the fonts used in your CSS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    <title>Luxury Jewelry</title>
+
+    <style>
+      body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .background-video-container {
+        position: fixed; 
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        z-index: -1; /* Keeps the video completely behind your React layers */
+      }
+
+      .background-video-container video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Keeps aspect ratio perfect without stretching */
+      }
+    </style>
   </head>
   <body>
-    <!-- This is where React will inject your App.jsx -->
+
+    <div class="background-video-container">
+      <video autoplay loop muted playsinline>
+        <source src="https://res.cloudinary.com/dccxjo9x8/video/upload/v1778949878/backgroundVideo_qpjurc.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
     <div id="root"></div>
-    
-    <!-- This points to your React entry file -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
