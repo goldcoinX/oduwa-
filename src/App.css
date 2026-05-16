@@ -1,28 +1,32 @@
-/* The home section frame container */
-.video-hero-container {
+/* Ensure the container is positioned relatively to bound the video layout */
+.container {
   position: relative;
   width: 100%;
-  height: 100vh; /* Keeps it exactly full screen for the home block */
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* The video sizing rule */
-.hero-bg-video {
+/* Perfect alignment mechanics for the hero background video section */
+.hero-video-background {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0; /* Sits at the bottom layer of this specific container */
+  height: 100vh; /* Keeps it strictly contained inside the home viewport fold */
+  overflow: hidden;
+  z-index: 0; /* Drops it below text but inside the flow of the home fold container */
 }
 
-/* The content layout overlaying the video */
-.hero-content {
+.hero-video-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Force all your layout elements to display safely over the running background stream */
+nav, 
+.scroll-footer-area, 
+.floating-socials {
   position: relative;
-  z-index: 2; /* Pushes your active text/buttons cleanly over the video */
-  text-align: center;
+  z-index: 2; /* Lifts content above the z-index 0 video layer */
 }
