@@ -1,24 +1,91 @@
-/* Styling layout properties for the video layout */
+/* 1. Fix the main container to allow full overlapping layouts */
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pushes navigation to center, footer to bottom */
+  align-items: center;
+}
+
+/* 2. Force the video to sit perfectly full-screen in the exact background layer */
 .hero-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh; 
+  height: 100%;
+  z-index: 0; /* Keeps it strictly behind the text layer */
   overflow: hidden;
-  z-index: 0; 
 }
 
 .background-video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* Ensures the video covers the screen without stretching */
 }
 
-/* Force all menu navigation nodes to sit over the top layer */
-nav, 
-.scroll-footer-area, 
-.floating-socials {
+/* 3. Style and align your navigation items layered OVER the video */
+nav {
   position: relative;
-  z-index: 2; 
+  z-index: 2; /* Lifts the links safely over the video layer */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto; /* Centers the navigation menu vertically */
+  margin-bottom: auto;
+  gap: 15px;
+}
+
+nav a {
+  color: #ffffff !important; /* Forces the links to turn clean, luxury white */
+  text-decoration: none;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Adds contrast so links are easy to read */
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+nav a:hover {
+  opacity: 0.7;
+}
+
+/* 4. Fix the bottom footer alignment */
+.scroll-footer-area {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.footer-email {
+  color: #ffffff !important;
+  text-decoration: none;
+  font-size: 0.8rem;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* 5. Fix the floating social icons on the side/bottom */
+.floating-socials {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2;
+  display: flex;
+  gap: 15px;
+}
+
+.floating-socials a {
+  color: #ffffff !important;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
 }
