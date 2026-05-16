@@ -39,7 +39,7 @@ body, html {
 
 .background-video { 
     height: 100%; width: 100%; object-fit: cover; 
-    filter: brightness(0.28); /* Deep aesthetic dim overlay */
+    filter: brightness(0.28);
     background-color: #050505;
 }
 
@@ -67,10 +67,9 @@ nav a:hover { color: #aaa; transform: scale(1.05); }
     top: 12%; 
     left: 0; 
     right: 0;
-    /* Reduced middle scale from 10vw to 7.8vw to prevent side-edge clipping */
     font-size: clamp(32px, 7.8vw, 110px); 
     z-index: 50; 
-    letter-spacing: -0.05em; /* Tightened tracking for compact screen fitting */
+    letter-spacing: -0.05em; 
     font-weight: 800; 
     text-align: center;
     animation: revealText 1.5s forwards !important; 
@@ -80,6 +79,7 @@ nav a:hover { color: #aaa; transform: scale(1.05); }
     box-sizing: border-box;
     padding: 0 4%;
 }
+
 .nav-video { top: 38%; left: 10%; animation-delay: 0.1s; }
 .nav-booking { top: 36%; left: 36%; animation-delay: 0.2s; }
 .nav-bio { top: 34%; left: 60%; animation-delay: 0.3s; }
@@ -154,21 +154,15 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
 @media (max-width: 768px) {
     .nav-inflection { 
         top: 14%; 
-        /* Optimized mobile clamping to match the narrower width profile */
         font-size: clamp(28px, 8.5vw, 48px); 
         letter-spacing: -0.03em;
     }
     
-    /* ... rest of your mobile responsive styles remain completely untouched ... */
-}
-    /* Retains abstract typography floating layout across narrow mobile dimensions */
     nav a { 
         font-size: 13px;
-        /* Uniformly applied the float sequence to separate mobile positions */
         animation: revealText 1s forwards, uniformFloat 4s ease-in-out infinite alternate !important;
     }
     
-    /* Custom non-overlapping coordinates for standard mobile screens */
     .nav-video { top: 32%; left: 8%; }
     .nav-booking { top: 41%; left: 12%; }
     .nav-bio { top: 32%; right: 8%; }
