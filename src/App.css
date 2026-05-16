@@ -62,16 +62,24 @@ nav a {
 
 nav a:hover { color: #aaa; transform: scale(1.05); }
 
-/* COORDINATES FOR EACH BUTTON */
+/* COORDINATES FOR THE MAIN SINGLE HEADER TITLE */
 .nav-inflection { 
-    top: 12%; left: 5%; right: 5%;
-    font-size: clamp(38px, 10vw, 110px); /* Clean responsive resizing scale */
-    z-index: 50; letter-spacing: -0.03em; font-weight: 800; text-align: center;
-    animation: revealText 1.5s forwards !important; /* Kept text absolutely locked steady */
+    top: 12%; 
+    left: 0; 
+    right: 0;
+    /* Reduced middle scale from 10vw to 7.8vw to prevent side-edge clipping */
+    font-size: clamp(32px, 7.8vw, 110px); 
+    z-index: 50; 
+    letter-spacing: -0.05em; /* Tightened tracking for compact screen fitting */
+    font-weight: 800; 
+    text-align: center;
+    animation: revealText 1.5s forwards !important; 
     text-shadow: 0px 8px 30px rgba(0,0,0,0.8);
     display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 4%;
 }
-
 .nav-video { top: 38%; left: 10%; animation-delay: 0.1s; }
 .nav-booking { top: 36%; left: 36%; animation-delay: 0.2s; }
 .nav-bio { top: 34%; left: 60%; animation-delay: 0.3s; }
@@ -146,9 +154,13 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
 @media (max-width: 768px) {
     .nav-inflection { 
         top: 14%; 
-        font-size: clamp(38px, 9.5vw, 54px); 
-        letter-spacing: -0.02em;
+        /* Optimized mobile clamping to match the narrower width profile */
+        font-size: clamp(28px, 8.5vw, 48px); 
+        letter-spacing: -0.03em;
     }
+    
+    /* ... rest of your mobile responsive styles remain completely untouched ... */
+}
     
     /* Retains abstract typography floating layout across narrow mobile dimensions */
     nav a { 
