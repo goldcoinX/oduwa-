@@ -161,7 +161,6 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
     
     /* ... rest of your mobile responsive styles remain completely untouched ... */
 }
-    
     /* Retains abstract typography floating layout across narrow mobile dimensions */
     nav a { 
         font-size: 13px;
