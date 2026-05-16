@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './App.css'; // Make sure this matches your CSS file name
+import './App.css'; 
 
 export default function App() {
   const [activePortal, setActivePortal] = useState(null);
@@ -41,11 +41,9 @@ export default function App() {
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
 
-  // --- NEW MUSIC BACKEND CHECKOUT LOGIC ---
+  // --- MUSIC CHECKOUT LOGIC ---
   const triggerMusicCheckout = async (trackId, trackName) => {
     showToast(`Initializing secure checkout for ${trackName}...`);
-    
-    // Quick browser prompt for their email to send the download link
     const customerEmail = prompt(`Please enter your email to receive your secure download link for ${trackName}:`);
     
     if (!customerEmail) {
@@ -54,17 +52,13 @@ export default function App() {
     }
 
     try {
-        // This calls your Next.js backend to determine if they pay in NGN or USD
         const response = await fetch('/api/checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ trackId: trackId, email: customerEmail })
         });
-
         const data = await response.json();
-
         if (data.url) {
-            // Redirects them to Flutterwave or LemonSqueezy
             window.location.href = data.url;
         } else {
             showToast("Initialization error. Please try again.");
@@ -79,14 +73,15 @@ export default function App() {
     <>
       <div className="container">
         
-        {/* NEW VIDEO LAYER (Sits behind everything inside .container) */}
-        <div className="hero-video-background">
-          <video autoPlay loop muted playsInline>
+        {/* VIDEO BACKGROUND CONTAINER (Replacing the old image container) */}
+        <div className="hero-container">
+          <video autoPlay loop muted playsInline className="background-video">
             <source src="https://res.cloudinary.com/dccxjo9x8/video/upload/v1778949878/backgroundVideo_qpjurc.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
 
+        {/* YOUR FULL ORIGINAL WEBSITE NAVIGATION LAYERS OVER THE VIDEO */}
         <nav>
           <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="nav-inflection">INFLECTION</a>
           <a href="https://www.youtube.com/@ODUWAIAM?sub_confirmation=1" target="_blank" rel="noreferrer" className="nav-video">VIDEO <span className="bling">●</span></a>
