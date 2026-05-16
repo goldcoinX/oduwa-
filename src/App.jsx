@@ -49,8 +49,8 @@ export default function App() {
     const customerEmail = prompt(`Please enter your email to receive your secure download link for ${trackName}:`);
     
     if (!customerEmail) {
-        showToast("Email required for purchase delivery.");
-        return;
+      showToast("Email required for purchase delivery.");
+      return;
     }
 
     try {
@@ -78,13 +78,13 @@ export default function App() {
   return (
     <>
       <div className="container">
-        <div className="hero-wrapper">
-          <img 
-            src="https://uploads.onecompiler.io/44jjpumhc/44k2gg9sv/newnew_Home_Image.jpg" 
-            onError={(e) => e.target.src='https://images.unsplash.com/photo-1493225458580-43e1e35dac78?auto=format&fit=crop&q=80&w=2000'} 
-            alt="Oduwa Hero" 
-            className="hero-figure" 
-          />
+        
+        {/* NEW VIDEO LAYER (Sits behind everything inside .container) */}
+        <div className="hero-video-background">
+          <video autoPlay loop muted playsInline>
+            <source src="https://res.cloudinary.com/dccxjo9x8/video/upload/v1778949878/backgroundVideo_qpjurc.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
 
         <nav>
@@ -194,14 +194,13 @@ export default function App() {
         </div>
       )}
 
-      {/* Music Portal (UPDATED FOR DIRECT CHECKOUT) */}
+      {/* Music Portal */}
       {activePortal === 'music' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Direct Store</h2>
             <p style={{textAlign: 'center', fontSize: '0.8rem', color: '#888', marginBottom: '20px'}}>Purchase High-Quality Studio Audio Directly</p>
             <div className="disco-grid">
-              {/* Note: I replaced the external URLs with the triggerMusicCheckout function */}
               <div className="disco-item" onClick={() => triggerMusicCheckout('track-uuid-inflection', 'INFLECTION')}>
                 <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/INFLECTION.png" className="disco-img" alt="INFLECTION" />
                 <div className="disco-title">Buy INFLECTION</div>
