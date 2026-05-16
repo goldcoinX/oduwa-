@@ -98,7 +98,7 @@ nav a:hover {
 .nav-inflection { 
   top: 10%; 
   left: 5%; 
-  font-size: clamp(50px, 15vw, 140px); 
+  font-size: clamp(38px, 11vw, 115px); /* Scaled the ceiling from 140px to 115px so it always fits perfectly */
   z-index: 50; 
   letter-spacing: -0.04em; 
   font-weight: 800; 
@@ -361,14 +361,10 @@ footer {
 
 /* --- Asymmetrical Responsive Scaling for Mobile Screens --- */
 @media (max-width: 600px) {
-  .nav-inflection { top: 12%; left: 5%; font-size: 56px; }
-  nav a { font-size: 14px; }
-  .nav-video { top: 34%; left: 8%; }
-  .nav-booking { top: 32%; left: 34%; }
-  .nav-bio { top: 30%; left: 58%; }
-  .nav-tour { top: 32%; right: 8%; }
-  .nav-merch { top: 56%; left: 5%; }
-  .nav-music { top: 56%; right: 5%; }
-  .nav-gallery { bottom: 18%; left: 10%; }
-  .nav-join { bottom: 18%; right: 10%; }
+  .nav-inflection { 
+    top: 12%; 
+    left: 5%; 
+    font-size: clamp(34px, 13vw, 52px); /* Makes sure it scales cleanly down on narrow phone screens too */
+  }
+  /* ... leave the rest of your mobile positions exactly as they are ... */
 }
