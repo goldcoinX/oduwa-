@@ -1,32 +1,24 @@
-/* Ensure the container is positioned relatively to bound the video layout */
-.container {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* Perfect alignment mechanics for the hero background video section */
-.hero-video-background {
+/* Styling layout properties for the video layout */
+.hero-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh; /* Keeps it strictly contained inside the home viewport fold */
+  height: 100vh; 
   overflow: hidden;
-  z-index: 0; /* Drops it below text but inside the flow of the home fold container */
+  z-index: 0; 
 }
 
-.hero-video-background video {
+.background-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Force all your layout elements to display safely over the running background stream */
+/* Force all menu navigation nodes to sit over the top layer */
 nav, 
 .scroll-footer-area, 
 .floating-socials {
   position: relative;
-  z-index: 2; /* Lifts content above the z-index 0 video layer */
+  z-index: 2; 
 }
