@@ -8,7 +8,7 @@ export default function App() {
   const [isToastVisible, setIsToastVisible] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => showToast("Inflection Season"), 1500);
+    setTimeout(() => showToast("Belly Dancer Season Out Now"), 1500);
   }, []);
 
   const showToast = (msg) => {
@@ -43,7 +43,7 @@ export default function App() {
     <>
       <div className="container">
         
-        {/* VIDEO BACKGROUND (with matching class targets) */}
+        {/* VIDEO BACKGROUND CONTAINER */}
         <div className="hero-container">
           <video autoPlay loop muted playsInline className="background-video">
             <source src="https://res.cloudinary.com/dccxjo9x8/video/upload/v1778949878/backgroundVideo_qpjurc.mp4" type="video/mp4" />
@@ -51,9 +51,11 @@ export default function App() {
           </video>
         </div>
 
-        {/* NAVIGATION LINKS - POSITIONED EXACTLY PER YOUR TEMPLATE */}
+        {/* NAVIGATION LINKS */}
         <nav>
-          <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="nav-inflection">INFLECTION</a>
+          {/* Swapped Title Header to New Release Single Link */}
+          <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="nav-inflection">BELLY DANCER</a>
+          
           <a href="https://www.youtube.com/@ODUWAIAM?sub_confirmation=1" target="_blank" rel="noreferrer" className="nav-video">VIDEO <span className="bling">●</span></a>
           <a onClick={() => openPortal('booking-portal')} className="nav-booking">BOOKING <span className="bling">●</span></a>
           <a onClick={() => openPortal('bio-portal')} className="nav-bio">BIO <span className="bling">●</span></a>
@@ -88,7 +90,7 @@ export default function App() {
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Book Oduwa</h2>
-            <form onSubmit={(e) => { e.preventDefault(); showToast('Booking Request Received. Management will contact you shortly.'); closePortal(); }}>
+            <form onSubmit={(e) => { e.preventDefault(); showToast('Booking Request Received.'); closePortal(); }}>
               <div className="portal-section">
                 <label className="section-label">Full Name / Organization</label>
                 <input type="text" placeholder="Who is booking?" required />
@@ -138,7 +140,6 @@ export default function App() {
                 <div className="disco-title">Studio Hoodie • $85</div>
               </div>
             </div>
-            
             {cart.length > 0 && (
               <div className="cart-status">
                 <div className="section-label">Your Cart</div>
@@ -152,7 +153,7 @@ export default function App() {
                 <div style={{ borderTop: '1px solid #333', marginTop: '10px', paddingTop: '10px', fontWeight: '700', display: 'flex', justifyContent: 'space-between' }}>
                   <span>TOTAL</span><span>${cartTotal}</span>
                 </div>
-                <button className="btn-action" onClick={() => { showToast('Checkout simulated'); emptyCart(); }}>CHECKOUT</button>
+                <button className="btn-action" onClick={emptyCart}>CHECKOUT</button>
               </div>
             )}
             <button className="btn-close" onClick={closePortal}>Back</button>
@@ -160,12 +161,17 @@ export default function App() {
         </div>
       )}
 
-      {/* Music Portal */}
+      {/* Music Portal - Added Belly Dancer Cover Art */}
       {activePortal === 'music-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Discography</h2>
             <div className="disco-grid">
+              {/* NEW RELEASE COVER WORK ADDED HERE */}
+              <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="disco-item">
+                <img src="https://uploads.onecompiler.io/44jjpumhc/44pfv7dn4/Belly%20Dancer.jpg" className="disco-img" alt="BELLY DANCER" />
+                <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>BELLY DANCER (NEW)</div>
+              </a>
               <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/INFLECTION.png" className="disco-img" alt="INFLECTION" />
                 <div className="disco-title">INFLECTION</div>
@@ -186,10 +192,6 @@ export default function App() {
                 <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/WONDERFUL.png" className="disco-img" alt="WONDERFUL" />
                 <div className="disco-title">WONDERFUL</div>
               </a>
-              <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44jzu3ttt/SAPA.png" className="disco-img" alt="SAPA" />
-                <div className="disco-title">SAPA</div>
-              </a>
             </div>
             <button className="btn-close" onClick={closePortal}>Back</button>
           </div>
@@ -203,8 +205,8 @@ export default function App() {
             <h2 className="portal-title">Biography</h2>
             <div style={{ fontSize: '0.9rem', lineHeight: '1.7', color: '#ccc' }}>
               <p><strong>ODUWA</strong> is more than an artist; he is a sonic architect. Born in Nigeria and raised within the vibrant polyrhythms of Afrobeat, Oduwa has spent years meticulously crafting a sound that bridges the gap between raw street energy and high-fashion luxury.</p>
-              <p>His latest project, <em>INFLECTION</em>, represents a turning point in his career—a moment of pure creative clarity where traditional drums meet futuristic synths.</p>
-              <p>2026 marks the beginning of the Inflection World Tour, bringing the vision to every corner of the globe.</p>
+              <p>His latest single, <em>BELLY DANCER</em>, marks a daring progression in his aesthetic—layering hypnotic visual concepts over hard-hitting international syncopated grooves.</p>
+              <p>2026 marks the beginning of the Global Tour cycle, scaling up experimental visions to live crowds across borders.</p>
             </div>
             <button className="btn-close" onClick={closePortal}>Back</button>
           </div>
