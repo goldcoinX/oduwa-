@@ -1,120 +1,158 @@
-/* 1. Fix the main layout container */
-.container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+:root {
+    --bg-color: #050505;
+    --text-color: #ffffff;
+    --font-main: 'Syne', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    --accent: #ffffff;
+    --portal-bg: #0a0a0a;
+    --border-color: #222222;
 }
 
-/* 2. THE BACKGROUND VIDEO CONTAINER (With added Dimmer overlay) */
-.hero-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0; /* Keeps it strictly in the background */
-  overflow: hidden;
+body, html {
+    margin: 0; padding: 0; width: 100%;
+    background-color: var(--bg-color); color: var(--text-color);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
 }
 
-/* This is the dark tinted shade layer that dims the video */
-.hero-container::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.45); /* Change 0.45 to higher (e.g., 0.6) to make it even darker */
-  z-index: 1; /* Sits directly on top of the video, but under your links */
+.container { 
+    position: relative; 
+    width: 100%; 
+    min-height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
 }
 
-.background-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none; /* Crucial! Stops the video from blocking link clicks */
+/* THE BACKGROUND VIDEO WRAPPER (Fixed full screen, dimmed) */
+.hero-container { 
+    position: fixed; 
+    top: 0; left: 0; 
+    height: 100vh; width: 100vw; 
+    z-index: 1; 
+    pointer-events: none; /* Allows click events to pass directly to menu links */
 }
 
-/* 3. YOUR NAVIGATION & LEVITATION KEYFRAMES */
-nav {
-  position: relative;
-  z-index: 2; /* Lifts the links safely into the foreground over the dim layer */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: auto;
-  margin-bottom: auto;
-  gap: 15px;
-  
-  /* Restores the Levitation animation motion effect */
-  animation: levitate 6s ease-in-out infinite; 
+.background-video { 
+    height: 100%; width: 100%; object-fit: cover; 
+    filter: brightness(0.6); /* Automatically dims the video background */
+    background-color: #111;
+}
+
+/* NAVIGATION LINKS LAYERED OVER THE DIMMED VIDEO */
+nav { 
+    position: relative; 
+    width: 100%; 
+    height: 100vh; 
+    z-index: 10; 
 }
 
 nav a {
-  color: #ffffff !important;
-  text-decoration: none;
-  font-weight: bold;
-  letter-spacing: 0.15em;
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
-  cursor: pointer;
-  pointer-events: auto; /* Guarantees they respond cleanly to finger touches or cursor clicks */
-  transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute; text-decoration: none; color: var(--accent); font-family: var(--font-main);
+    font-weight: 700; font-size: clamp(14px, 4vw, 22px); transition: var(--transition);
+    cursor: pointer; opacity: 0; display: flex; align-items: center; white-space: nowrap; gap: 6px;
+    text-shadow: 0px 4px 15px rgba(0,0,0,1); 
+    animation: revealText 1.5s forwards, uniformFloat 5s ease-in-out infinite alternate;
+    letter-spacing: 0.05em; text-transform: uppercase;
 }
 
-nav a:hover {
-  opacity: 0.7;
+nav a:hover { color: #aaa; transform: scale(1.05); }
+
+/* COORDINATES FOR EACH LINK */
+.nav-inflection { 
+    top: 10%; left: 5%; 
+    font-size: clamp(50px, 15vw, 140px); 
+    z-index: 50; letter-spacing: -0.04em; font-weight: 800; 
+    animation: revealText 1.5s forwards !important; /* Keeps title stable */
+    text-shadow: 0px 10px 40px rgba(0,0,0,0.7);
 }
 
-/* If your old project file used an explicit levitate keyframe rule, 
-   this safely replaces it to keep the floating motion buttery smooth */
-@keyframes levitate {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px); /* Adjusts how high the menu floats up and down */
-  }
-  100% {
-    transform: translateY(0px);
-  }
+.nav-video { top: 35%; left: 10%; }
+.nav-booking { top: 33%; left: 32%; }
+.nav-bio { top: 31%; left: 54%; }
+.nav-tour { top: 33%; right: 10%; }
+.nav-merch { top: 58%; left: 8%; }
+.nav-music { top: 58%; right: 8%; }
+.nav-gallery { bottom: 15%; left: 15%; }
+.nav-join { bottom: 15%; right: 15%; }
+
+/* BLINKING DOT EFFECT */
+.bling { 
+    display: inline-block; 
+    font-size: 0.6em; 
+    color: var(--text-color); 
+    animation: blingScale 2.2s infinite; 
+    opacity: 0.8; 
 }
 
-/* 4. Bottom Footer alignment */
+/* ANIMATION KEYFRAMES */
+@keyframes blingScale { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.3); opacity: 1; } }
+@keyframes uniformFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
+@keyframes revealText { from { opacity: 0; } to { opacity: 1; } }
+
+/* FOOTER AND LAYOUT WRAPPERS */
 .scroll-footer-area {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  text-align: center;
-  margin-bottom: 20px;
+    position: relative; z-index: 10; width: 100%; height: 20vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    align-items: center; padding-bottom: 40px;
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.9));
 }
+footer { text-align: center; opacity: 0.6; }
+.footer-email { text-decoration: none; color: #fff; display: block; margin-bottom: 10px; font-weight: 600; font-family: var(--font-body); }
 
-.footer-email {
-  color: #ffffff !important;
-  text-decoration: none;
-  font-size: 0.8rem;
+.floating-socials { position: fixed; top: 30px; right: 20px; z-index: 500; display: flex; gap: 15px; }
+.floating-socials a { color: #fff; opacity: 0.5; text-decoration: none; font-size: 0.75rem; font-weight: 700; transition: 0.3s; font-family: var(--font-body); }
+.floating-socials a:hover { opacity: 1; }
+
+.scroll-indicator {
+    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+    font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.4;
+    animation: scrollPulse 2s infinite; font-family: var(--font-body);
 }
+@keyframes scrollPulse { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }
 
-/* 5. Floating Socials Layering */
-.floating-socials {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  z-index: 2;
-  display: flex;
-  gap: 15px;
+/* PORTAL OVERLAYS (Maintained for React functionality) */
+.overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.98); z-index: 1000; display: flex;
+    flex-direction: column; justify-content: center; align-items: center;
+    padding: 20px; backdrop-filter: blur(40px);
 }
+.portal-card {
+    background: var(--portal-bg); padding: 40px 30px; border-radius: 4px;
+    max-width: 600px; width: 100%; position: relative;
+    border: 1px solid var(--border-color); box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+    max-height: 85vh; overflow-y: auto; box-sizing: border-box;
+}
+.portal-title { font-family: var(--font-main); font-size: 1.8rem; color: var(--accent); margin-top: 0; margin-bottom: 25px; text-align: center; text-transform: uppercase; }
+.portal-section { margin-bottom: 20px; }
+.section-label { display: block; margin-bottom: 8px; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.15em; color: #888; text-transform: uppercase; }
+input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; background: #000; color: #fff; font-family: var(--font-body); box-sizing: border-box; font-size: 14px; }
+.btn-action { background: #fff; color: #000; border: none; padding: 16px; cursor: pointer; font-family: var(--font-main); font-weight: 700; width: 100%; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 10px; }
+.btn-close { margin-top: 20px; background: none; border: none; font-size: 0.65rem; cursor: pointer; color: #444; width: 100%; text-transform: uppercase; letter-spacing: 0.2em; }
+.cart-status { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 4px; margin-top: 20px; border: 1px dashed #333; font-size: 0.8rem; }
+.cart-item-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.toast-message { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #fff; color: #000; padding: 12px 24px; z-index: 2000; font-family: var(--font-main); font-weight: 800; text-transform: uppercase; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); opacity: 0; pointer-events: none; text-align: center; font-size: 0.75rem; }
+.toast-message.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.disco-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
+.disco-item { text-align: center; text-decoration: none; cursor: pointer; }
+.disco-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border: 1px solid #222; margin-bottom: 6px; }
+.disco-title { font-size: 0.65rem; color: #fff; font-family: var(--font-main); text-transform: uppercase; }
 
-.floating-socials a {
-  color: #ffffff !important;
-  text-decoration: none;
-  font-size: 0.8rem;
-  font-weight: bold;
+/* RESPONSIVE MOBILE POSITIONING OVERRIDES */
+@media (max-width: 600px) {
+    .nav-inflection { top: 12%; left: 5%; font-size: 56px; }
+    nav a { font-size: 14px; }
+    .nav-video { top: 34%; left: 8%; }
+    .nav-booking { top: 32%; left: 34%; }
+    .nav-bio { top: 30%; left: 58%; }
+    .nav-tour { top: 32%; right: 8%; }
+    .nav-merch { top: 56%; left: 5%; }
+    .nav-music { top: 56%; right: 5%; }
+    .nav-gallery { bottom: 18%; left: 10%; }
+    .nav-join { bottom: 18%; right: 10%; }
 }
