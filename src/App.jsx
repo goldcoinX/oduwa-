@@ -1,11 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'; 
 
+// ─── GOOGLE APPS SCRIPT BACKEND ENDPOINT CONFIGURATION ───
+const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycbxcI6NsdYHUMz2lma_cx7_1-Vf1CCLkG0n9XY86_XucG5q7RDvs9D2fnDhgijF70SVkJg/exec";
+
+async function sendToBackendEngine(payloadData) {
+  try {
+    await fetch(BACKEND_API_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payloadData)
+    });
+    return { success: true, message: "Payload successfully routed." };
+  } catch (error) {
+    console.error("Critical backend connection submission failure:", error);
+    return { success: false, message: error.toString() };
+  }
+}
+
 export default function App() {
   const [activePortal, setActivePortal] = useState(null);
   const [cart, setCart] = useState([]);
   const [toastMsg, setToastMsg] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
+
+  // ─── FORM INPUT STATES FOR DATABASE BINDINGS ───
+  const [bookingName, setBookingName] = useState('');
+  const [bookingEmail, setBookingEmail] = useState('');
+  const [bookingDate, setBookingDate] = useState('');
+  const [bookingLocation, setBookingLocation] = useState('');
+  const [bookingBudget, setBookingBudget] = useState('$1k - $10k');
+  const [subscribeEmail, setSubscribeEmail] = useState('');
 
   useEffect(() => {
     setTimeout(() => showToast("Belly Dancer Season Out Now"), 1500);
@@ -32,9 +60,72 @@ export default function App() {
     showToast(`Added ${name} to Cart`);
   };
 
-  const emptyCart = () => {
-    setCart([]);
-    closePortal();
+  // ─── LIVE BACKEND HANDLERS ───
+  const handleBookingSubmit = async (e) => {
+    e.preventDefault();
+    showToast('Sending Booking Request...');
+    
+    const payload = {
+      action: 'booking',
+      name: bookingName,
+      email: bookingEmail,
+      date: bookingDate,
+      location: bookingLocation,
+      budget: bookingBudget,
+      notes: 'Submitted via Web Abstract Portal Form'
+    };
+
+    const result = await sendToBackendEngine(payload);
+    if (result.success) {
+      showToast('Booking Request Received.');
+      // Flush form states
+      setBookingName('');
+      setBookingEmail('');
+      setBookingDate('');
+      setBookingLocation('');
+      closePortal();
+    }
+  };
+
+  const handleSubscribeSubmit = async (e) => {
+    e.preventDefault();
+    showToast('Synchronizing Frequencies...');
+
+    const payload = {
+      action: 'subscribe',
+      email: subscribeEmail
+    };
+
+    const result = await sendToBackendEngine(payload);
+    if (result.success) {
+      showToast('Welcome to the Tribe.');
+      setSubscribeEmail('');
+      closePortal();
+    }
+  };
+
+  const handleCheckoutSubmit = async () => {
+    const customerEmail = prompt("Please enter your email to complete your design allocation order:");
+    if (!customerEmail) return;
+
+    showToast('Processing Checkout...');
+
+    const payload = {
+      action: 'checkout',
+      name: 'Web Store Customer',
+      email: customerEmail,
+      address: 'Digital Processing Queue',
+      phone: 'None Provided',
+      items: cart.map(item => `${item.name}`).join(', '),
+      total: cartTotal.toFixed(2)
+    };
+
+    const result = await sendToBackendEngine(payload);
+    if (result.success) {
+      setCart([]);
+      showToast('Order Logged Successfully.');
+      closePortal();
+    }
   };
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
@@ -53,7 +144,6 @@ export default function App() {
 
         {/* NAVIGATION LINKS */}
         <nav>
-          {/* Swapped Title Header to New Release Single Link */}
           <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="nav-inflection">BELLY DANCER</a>
           
           <a href="https://www.youtube.com/@ODUWAIAM?sub_confirmation=1" target="_blank" rel="noreferrer" className="nav-video">VIDEO <span className="bling">●</span></a>
@@ -90,28 +180,28 @@ export default function App() {
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Book Oduwa</h2>
-            <form onSubmit={(e) => { e.preventDefault(); showToast('Booking Request Received.'); closePortal(); }}>
+            <form onSubmit={handleBookingSubmit}>
               <div className="portal-section">
                 <label className="section-label">Full Name / Organization</label>
-                <input type="text" placeholder="Who is booking?" required />
+                <input type="text" placeholder="Who is booking?" value={bookingName} onChange={(e) => setBookingName(e.target.value)} required />
               </div>
               <div className="portal-section">
                 <label className="section-label">Email Address</label>
-                <input type="email" placeholder="Your contact email" required />
+                <input type="email" placeholder="Your contact email" value={bookingEmail} onChange={(e) => setBookingEmail(e.target.value)} required />
               </div>
               <div className="portal-section" style={{ display: 'flex', gap: '10px' }}>
                 <div style={{ flex: 1 }}>
                   <label className="section-label">Event Date</label>
-                  <input type="text" placeholder="DD/MM/YYYY" />
+                  <input type="text" placeholder="DD/MM/YYYY" value={bookingDate} onChange={(e) => setBookingDate(e.target.value)} />
                 </div>
                 <div style={{ flex: 1 }}>
                   <label className="section-label">Location</label>
-                  <input type="text" placeholder="City, Country" />
+                  <input type="text" placeholder="City, Country" value={bookingLocation} onChange={(e) => setBookingLocation(e.target.value)} />
                 </div>
               </div>
               <div className="portal-section">
                 <label className="section-label">Budget Range (USD)</label>
-                <select>
+                <select value={bookingBudget} onChange={(e) => setBookingBudget(e.target.value)}>
                   <option>$1k - $10k</option>
                   <option>$10k - $25k</option>
                   <option>$25k - $50k</option>
@@ -153,7 +243,7 @@ export default function App() {
                 <div style={{ borderTop: '1px solid #333', marginTop: '10px', paddingTop: '10px', fontWeight: '700', display: 'flex', justifyContent: 'space-between' }}>
                   <span>TOTAL</span><span>${cartTotal}</span>
                 </div>
-                <button className="btn-action" onClick={emptyCart}>CHECKOUT</button>
+                <button className="btn-action" onClick={handleCheckoutSubmit}>CHECKOUT</button>
               </div>
             )}
             <button className="btn-close" onClick={closePortal}>Back</button>
@@ -161,13 +251,12 @@ export default function App() {
         </div>
       )}
 
-      {/* Music Portal - Added Belly Dancer Cover Art */}
+      {/* Music Portal */}
       {activePortal === 'music-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Discography</h2>
             <div className="disco-grid">
-              {/* NEW RELEASE COVER WORK ADDED HERE */}
               <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://uploads.onecompiler.io/44jjpumhc/44pfv7dn4/Belly%20Dancer.jpg" className="disco-img" alt="BELLY DANCER" />
                 <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>BELLY DANCER (NEW)</div>
@@ -249,11 +338,13 @@ export default function App() {
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Join Tribe</h2>
-            <div className="portal-section">
-              <label className="section-label">Email</label>
-              <input type="email" placeholder="your@email.com" />
-            </div>
-            <button className="btn-action" onClick={() => { showToast('Subscribed'); closePortal(); }}>SUBSCRIBE</button>
+            <form onSubmit={handleSubscribeSubmit}>
+              <div className="portal-section">
+                <label className="section-label">Email</label>
+                <input type="email" placeholder="your@email.com" value={subscribeEmail} onChange={(e) => setSubscribeEmail(e.target.value)} required />
+              </div>
+              <button type="submit" className="btn-action">SUBSCRIBE</button>
+            </form>
             <button className="btn-close" onClick={closePortal}>Back</button>
           </div>
         </div>
