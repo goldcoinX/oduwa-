@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css'; 
 
 // ─── GOOGLE APPS SCRIPT BACKEND ENDPOINT CONFIGURATION ───
-const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycbyeTB_9LXvaJwNoLmnOoLj2QRHLSENImtVaRwLcTmXs-D78cUrEgM8YpgH6kuoo5bsLOg/exec";
+const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycbxcI6NsdYHUMz2lma_cx7_1-Vf1CCLkG0n9XY86_XucG5q7RDvs9D2fnDhgijF70SVkJg/exec";
 
 async function sendToBackendEngine(payloadData) {
   try {
@@ -160,7 +160,8 @@ export default function App() {
 
         <div className="scroll-footer-area">
           <footer>
-            <a href="mailto:Info@oduwaiam.com" className="footer-email">Info@oduwaiam.com</a>
+            {/* EMAIL HAS BEEN CONVERTED TO YOUR PRODUCTION ENDPOINT */}
+            <a href="mailto:booking@kingoduwa.com" className="footer-email">booking@kingoduwa.com</a>
             <div style={{ letterSpacing: '0.1em', fontSize: '0.6rem' }}>&copy; ODUWA 2026 | ALL RIGHTS RESERVED</div>
           </footer>
         </div>
