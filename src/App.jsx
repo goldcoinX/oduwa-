@@ -1,283 +1,334 @@
-import React, { useState, useEffect } from 'react';
-import './App.css'; 
+// -----------------------------------------------------------------------------
+// ODUWA PREMIUM BACKEND SYSTEM (Standalone Production Engine)
+// Core Architect: Senior Full-Stack Engineer
+// Target: Google Spreadsheet & Luxury Email Engine
+// -----------------------------------------------------------------------------
 
-// ─── GOOGLE APPS SCRIPT BACKEND ENDPOINT CONFIGURATION ───
-const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycbxcI6NsdYHUMz2lma_cx7_1-Vf1CCLkG0n9XY86_XucG5q7RDvs9D2fnDhgijF70SVkJg/exec";
+// Core Target Spreadsheet ID
+const SPREADSHEET_ID = "1YKmN18XBKC0nsvdW0nnohCVkIKBCJ_Z_zLVY03tHxBI";
 
-async function sendToBackendEngine(payloadData) {
+// Sheet tab database configuration
+const SHEET_BOOKINGS    = "Bookings";
+const SHEET_SUBSCRIBERS = "Subscribers";
+const SHEET_CHECKOUTS   = "Orders";
+
+// Mail Dispatch Configurations
+const SENDER_EMAIL         = "booking@kingoduwa.com"; // Official Sender Outbound Alias
+const INTERNAL_NOTIF_EMAIL = "booking@kingoduwa.com"; // Management Notification Endpoint
+
+// Luxury Color Design Tokens
+const COLOR_BRAND_GOLD  = "#EAB308"; // Premium Gold Accent
+const COLOR_BRAND_BLACK = "#030303"; // Premium Onyx Deep Background
+const COLOR_CARD_BLACK  = "#0D0D0D"; // Dark Card Fill
+const COLOR_TEXT_LIGHT  = "#FAFAFA"; // Light Off-White Typography
+const COLOR_TEXT_MUTED  = "#A3A3A3"; // Subdued Gray Text
+
+/**
+ * Resolves the Google Spreadsheet connection using the explicit ID.
+ * Avoids getActiveSpreadsheet context issues in independent web app executions.
+ */
+function getTargetSpreadsheet() {
   try {
-    await fetch(BACKEND_API_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8"
-      },
-      body: JSON.stringify(payloadData)
-    });
-    return { success: true, message: "Payload successfully routed." };
-  } catch (error) {
-    console.error("Critical backend connection submission failure:", error);
-    return { success: false, message: error.toString() };
+    return SpreadsheetApp.openById(SPREADSHEET_ID);
+  } catch (err) {
+    throw new Error("Unable to establish target connection to Spreadsheet (ID: " + SPREADSHEET_ID + "). Ensure correct sharing permissions are configured. Details: " + err.message);
   }
 }
 
-export default function App() {
-  const [activePortal, setActivePortal] = useState(null);
-  const [toastMsg, setToastMsg] = useState('');
-  const [isToastVisible, setIsToastVisible] = useState(false);
+/**
+ * Intercepts preflight options requests for browser-to-script communication.
+ */
+function doOptions(e) {
+  return ContentService.createTextOutput("")
+    .setMimeType(ContentService.MimeType.TEXT);
+}
 
-  // ─── FORM INPUT STATES FOR DATABASE BINDINGS ───
-  const [bookingName, setBookingName] = useState('');
-  const [bookingEmail, setBookingEmail] = useState('');
-  const [bookingDate, setBookingDate] = useState('');
-  const [bookingLocation, setBookingLocation] = useState('');
-  const [bookingBudget, setBookingBudget] = useState('$1k - $10k');
-  const [subscribeEmail, setSubscribeEmail] = useState('');
-
-  useEffect(() => {
-    setTimeout(() => showToast("Belly Dancer Season Out Now"), 1500);
-  }, []);
-
-  const showToast = (msg) => {
-    setToastMsg(msg);
-    setIsToastVisible(true);
-    setTimeout(() => setIsToastVisible(false), 3000);
-  };
-
-  const openPortal = (id) => {
-    setActivePortal(id);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closePortal = () => {
-    setActivePortal(null);
-    document.body.style.overflow = 'auto';
-  };
-
-  // ─── LIVE BACKEND HANDLERS ───
-  const handleBookingSubmit = async (e) => {
-    e.preventDefault();
-    showToast('Sending Booking Request...');
-     
-    const payload = {
-      action: 'booking',
-      name: bookingName,
-      email: bookingEmail,
-      date: bookingDate,
-      location: bookingLocation,
-      budget: bookingBudget,
-      notes: 'Submitted via Web Abstract Portal Form'
-    };
-
-    const result = await sendToBackendEngine(payload);
-    if (result.success) {
-      showToast('Booking Request Received.');
-      setBookingName('');
-      setBookingEmail('');
-      setBookingDate('');
-      setBookingLocation('');
-      closePortal();
+/**
+ * Serves as the primary programmatic router for incoming HTTP POST payloads.
+ */
+function doPost(e) {
+  try {
+    if (!e || !e.postData || !e.postData.contents) {
+      throw new Error("Payload is empty or missing postData object.");
     }
-  };
 
-  const handleSubscribeSubmit = async (e) => {
-    e.preventDefault();
-    showToast('Synchronizing Frequencies...');
-
-    const payload = {
-      action: 'subscribe',
-      email: subscribeEmail
-    };
-
-    const result = await sendToBackendEngine(payload);
-    if (result.success) {
-      showToast('Welcome to the Tribe.');
-      setSubscribeEmail('');
-      closePortal();
+    // Capture and clean post content to prevent parser failures
+    let rawData = e.postData.contents.trim();
+    
+    // Remove potential non-JSON enclosing quotation markers if sent as plain text strings
+    if (rawData.charAt(0) === '"' && rawData.charAt(rawData.length - 1) === '"') {
+      rawData = rawData.substring(1, rawData.length - 1);
     }
-  };
+    
+    const data = JSON.parse(rawData);
+    const action = data.action;
+    
+    // Ensure data sheet layouts are initialized
+    initializeDatabase();
+    
+    let outcomeMessage = "";
+    if (action === 'booking') {
+      outcomeMessage = processBooking(data);
+    } else if (action === 'subscribe') {
+      outcomeMessage = processSubscription(data);
+    } else if (action === 'checkout') {
+      outcomeMessage = processCheckout(data);
+    } else {
+      throw new Error("Invalid Action Protocol submitted inside payload.");
+    }
+    
+    return buildJsonResponse({ success: true, message: outcomeMessage });
+    
+  } catch (error) {
+    Logger.log("Critical execution error registered: " + error.toString());
+    return buildJsonResponse({ success: false, message: error.toString() });
+  }
+}
 
-  return (
-    <>
-      <div className="container">
-        
-        {/* VIDEO BACKGROUND CONTAINER */}
-        <div className="hero-container">
-          <video autoPlay loop muted playsInline className="background-video">
-            <source src="https://res.cloudinary.com/dccxjo9x8/video/upload/v1778949878/backgroundVideo_qpjurc.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
+/**
+ * Confirms database layouts are operational across active sheets.
+ */
+function initializeDatabase() {
+  const ss = getTargetSpreadsheet();
+  
+  if (!ss.getSheetByName(SHEET_BOOKINGS)) {
+    const bSheet = ss.insertSheet(SHEET_BOOKINGS);
+    bSheet.appendRow(["Timestamp", "Booker Name", "Email", "Event Date", "Location", "Budget Range", "Special Notes"]);
+    bSheet.getRange("A1:G1").setFontWeight("bold").setBackground("#1C1917").setFontColor("#FFFFFF");
+  }
+  
+  if (!ss.getSheetByName(SHEET_SUBSCRIBERS)) {
+    const sSheet = ss.insertSheet(SHEET_SUBSCRIBERS);
+    sSheet.appendRow(["Timestamp", "Subscriber Email"]);
+    sSheet.getRange("A1:B1").setFontWeight("bold").setBackground("#1C1917").setFontColor("#FFFFFF");
+  }
+  
+  if (!ss.getSheetByName(SHEET_CHECKOUTS)) {
+    const cSheet = ss.insertSheet(SHEET_CHECKOUTS);
+    cSheet.appendRow(["Timestamp", "Customer Name", "Email", "Delivery Address", "Phone", "Items Purchased", "Total Price"]);
+    cSheet.getRange("A1:G1").setFontWeight("bold").setBackground("#1C1917").setFontColor("#FFFFFF");
+  }
+}
 
-        {/* NAVIGATION LINKS */}
-        <nav>
-          <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="nav-inflection">BELLY DANCER</a>
-          
-          <a href="https://www.youtube.com/@ODUWAIAM?sub_confirmation=1" target="_blank" rel="noreferrer" className="nav-video">VIDEO <span className="bling">●</span></a>
-          <a onClick={() => openPortal('booking-portal')} className="nav-booking">BOOKING <span className="bling">●</span></a>
-          <a onClick={() => openPortal('bio-portal')} className="nav-bio">BIO <span className="bling">●</span></a>
-          <a onClick={() => openPortal('tour-portal')} className="nav-tour">TOUR <span className="bling">●</span></a>
-          <a onClick={() => openPortal('merch-portal')} className="nav-merch">MERCH <span className="bling">●</span></a>
-          <a onClick={() => openPortal('music-portal')} className="nav-music">MUSIC <span className="bling">●</span></a>
-          <a onClick={() => openPortal('gallery-portal')} className="nav-gallery">GALLERY <span className="bling">●</span></a>
-          <a onClick={() => openPortal('join-portal')} className="nav-join">JOIN <span className="bling">●</span></a>
-          
-          <div className="scroll-indicator">Scroll Down</div>
-        </nav>
-
-        <div className="scroll-footer-area">
-          <footer>
-            <a href="mailto:Info@oduwaiam.com" className="footer-email">Info@oduwaiam.com</a>
-            <div style={{ letterSpacing: '0.1em', fontSize: '0.6rem' }}>&copy; ODUWA 2026 | ALL RIGHTS RESERVED</div>
-          </footer>
-        </div>
-
-        <div className="floating-socials">
-          <a href="https://www.youtube.com/@ODUWAIAM?sub_confirmation=1" target="_blank" rel="noreferrer">YT</a>
-          <a href="https://instagram.com/oduwaiam" target="_blank" rel="noreferrer">IG</a>
-          <a href="https://twitter.com/oduwaiam" target="_blank" rel="noreferrer">X</a>
-          <a href="https://tiktok.com/@oduwaiam" target="_blank" rel="noreferrer">TK</a>
-        </div>
+/**
+ * Wraps dynamic body content inside a luxury responsive HTML template structure.
+ */
+function buildBrandedHtmlEmail(headerText, bodyHtml) {
+  return `
+    <div style="background-color: ${COLOR_BRAND_BLACK}; color: ${COLOR_TEXT_LIGHT}; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 40px 20px; max-width: 600px; margin: 0 auto; border-radius: 16px; border: 1px solid #1A1A1A;">
+      <div style="text-align: center; margin-bottom: 35px; border-bottom: 1px solid #1A1A1A; padding-bottom: 25px;">
+        <h1 style="font-size: 32px; letter-spacing: 0.3em; color: #FFFFFF; font-weight: 900; text-transform: uppercase; margin: 0 0 4px 0;">ODUWA</h1>
+        <p style="font-size: 9px; letter-spacing: 0.55em; color: ${COLOR_BRAND_GOLD}; text-transform: uppercase; margin: 0; font-weight: bold;">The Sonic Architect</p>
       </div>
+      
+      <div style="padding: 10px 15px; line-height: 1.8; color: #E5E5E5; font-size: 15px;">
+        <h2 style="color: #FFFFFF; font-size: 19px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: bold; margin-bottom: 20px; border-left: 3px solid ${COLOR_BRAND_GOLD}; padding-left: 12px;">
+          ${headerText}
+        </h2>
+        ${bodyHtml}
+      </div>
+      
+      <div style="margin-top: 45px; border-top: 1px solid #1A1A1A; padding-top: 30px; text-align: center; font-size: 11px; color: ${COLOR_TEXT_MUTED};">
+        <p style="letter-spacing: 0.2em; font-weight: bold; color: #FFFFFF; margin-bottom: 15px; font-size: 10px;">JOIN THE TRIBE IN REAL FREQUENCIES</p>
+        <p style="margin-bottom: 25px;">
+          <a href="https://instagram.com/oduwaiam" style="color: ${COLOR_BRAND_GOLD}; text-decoration: none; margin: 0 12px; font-weight: bold; letter-spacing: 0.05em;">INSTAGRAM</a> | 
+          <a href="https://www.youtube.com/@ODUWAIAM?sub_confirmation=1" style="color: ${COLOR_BRAND_GOLD}; text-decoration: none; margin: 0 12px; font-weight: bold; letter-spacing: 0.05em;">YOUTUBE</a> | 
+          <a href="https://twitter.com/oduwaiam" style="color: ${COLOR_BRAND_GOLD}; text-decoration: none; margin: 0 12px; font-weight: bold; letter-spacing: 0.05em;">X</a>
+        </p>
+        <p style="letter-spacing: 0.25em; font-size: 8px; text-transform: uppercase; color: #525252;">&copy; 2026 ODUWA | MANAGEMENT & DESIGNS LLC</p>
+      </div>
+    </div>
+  `;
+}
 
-      <div className={`toast-message ${isToastVisible ? 'show' : ''}`}>{toastMsg}</div>
+/**
+ * Processes incoming booking payloads.
+ */
+function processBooking(data) {
+  const ss = getTargetSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_BOOKINGS);
+  const timestamp = new Date();
+  
+  sheet.appendRow([
+    timestamp,
+    data.name || 'Anonymous Booker',
+    data.email,
+    data.date || 'TBD',
+    data.location || 'TBD',
+    data.budget || 'TBD',
+    data.notes || ''
+  ]);
+  
+  // Internal Alert Email body compilation
+  const internalSubject = "🚨 NEW BOOKING REQUEST RECEIVED - ODUWA Portal";
+  const internalBody = `
+    <p>Management Team,</p>
+    <p>A new global booking inquiry has been recorded and logged to the master spreadsheet:</p>
+    <div style="background-color: ${COLOR_CARD_BLACK}; border: 1px solid #1D1D1D; padding: 15px; border-radius: 8px; font-size: 13px;">
+      <p style="margin: 4px 0;"><strong>Company/Booker:</strong> ${data.name || 'Not Provided'}</p>
+      <p style="margin: 4px 0;"><strong>Email Address:</strong> ${data.email}</p>
+      <p style="margin: 4px 0;"><strong>Proposed Date:</strong> ${data.date || 'To be determined'}</p>
+      <p style="margin: 4px 0;"><strong>Proposed Venue/Location:</strong> ${data.location || 'To be determined'}</p>
+      <p style="margin: 4px 0;"><strong>Budget Bracket:</strong> ${data.budget || 'Unspecified'}</p>
+      <p style="margin: 4px 0;"><strong>Specific Requirements:</strong> ${data.notes || 'None declared'}</p>
+    </div>
+  `;
+  sendResilientEmail(INTERNAL_NOTIF_EMAIL, internalSubject, buildBrandedHtmlEmail("Internal Management Alert", internalBody), "A booking query has been received.");
 
-      {/* Booking Portal */}
-      {activePortal === 'booking-portal' && (
-        <div className="overlay">
-          <div className="portal-card">
-            <h2 className="portal-title">Book Oduwa</h2>
-            <form onSubmit={handleBookingSubmit}>
-              <div className="portal-section">
-                <label className="section-label">Full Name / Organization</label>
-                <input type="text" placeholder="Who is booking?" value={bookingName} onChange={(e) => setBookingName(e.target.value)} required />
-              </div>
-              <div className="portal-section">
-                <label className="section-label">Email Address</label>
-                <input type="email" placeholder="Your contact email" value={bookingEmail} onChange={(e) => setBookingEmail(e.target.value)} required />
-              </div>
-              <div className="portal-section" style={{ display: 'flex', gap: '10px' }}>
-                <div style={{ flex: 1 }}>
-                  <label className="section-label">Event Date</label>
-                  <input type="text" placeholder="DD/MM/YYYY" value={bookingDate} onChange={(e) => setBookingDate(e.target.value)} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <label className="section-label">Location</label>
-                  <input type="text" placeholder="City, Country" value={bookingLocation} onChange={(e) => setBookingLocation(e.target.value)} />
-                </div>
-              </div>
-              <div className="portal-section">
-                <label className="section-label">Budget Range (USD)</label>
-                <select value={bookingBudget} onChange={(e) => setBookingBudget(e.target.value)}>
-                  <option>$1k - $10k</option>
-                  <option>$10k - $25k</option>
-                  <option>$25k - $50k</option>
-                  <option>$100k - $1m</option>
-                </select>
-              </div>
-              <button type="submit" className="btn-action">SEND INQUIRY</button>
-            </form>
-            <button className="btn-close" onClick={closePortal}>Close</button>
-          </div>
-        </div>
-      )}
+  // External Customer Email body compilation
+  const bookerSubject = "ODUWA | Booking Inquiry Received";
+  const bookerBody = `
+    <p>Dear <strong>${data.name || 'Representative'}</strong>,</p>
+    <p>Thank you for initiating your project inquiry. Our agency representing the live and performance coordination department of ODUWA has successfully received your proposal.</p>
+    
+    <div style="background-color: ${COLOR_CARD_BLACK}; border: 1px solid #1D1D1D; border-radius: 8px; padding: 18px; margin: 20px 0;">
+      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Target Date:</strong> ${data.date || 'To be determined'}</p>
+      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Venue Profile:</strong> ${data.location || 'To be determined'}</p>
+      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Allocated Bracket:</strong> ${data.budget || 'Under Negotiation'}</p>
+    </div>
+    
+    <p>Our operations division actively evaluates rider profiles and schedules across continental borders. A representative will contact you with booking specifications within 48 business hours.</p>
+    <p style="margin-top: 30px;">In collaboration,<br><em style="color: #FFFFFF; font-style: normal; font-weight: bold;">ODUWA Agency Services Desk</em></p>
+  `;
+  sendResilientEmail(data.email, bookerSubject, buildBrandedHtmlEmail("Request Under Review", bookerBody), "Thank you for booking ODUWA. We have received your query.");
+  
+  return "Booking request registered successfully.";
+}
 
-      {/* Merch Portal (Configured with elegant placeholder) */}
-      {activePortal === 'merch-portal' && (
-        <div className="overlay">
-          <div className="portal-card">
-            <h2 className="portal-title">Merch Store</h2>
-            <div style={{ textAlign: 'center', padding: '40px 0', color: '#ccc', letterSpacing: '0.1em', fontSize: '0.9rem' }}>
-              <p style={{ color: '#EAB308', fontWeight: 'bold' }}>BELLY DANCER CAPSULE COLLECTION</p>
-              <p style={{ marginTop: '10px', fontSize: '0.8rem', color: '#888' }}>LOCKING DOWN INVENTORY LINES • DROPPING SOON</p>
-            </div>
-            <button className="btn-close" onClick={closePortal}>Back</button>
-          </div>
-        </div>
-      )}
+/**
+ * Processes audience email subscription entry.
+ */
+function processSubscription(data) {
+  const ss = getTargetSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_SUBSCRIBERS);
+  const timestamp = new Date();
+  
+  // Verify user is not already recorded to avoid duplicates
+  if (sheet.getLastRow() > 1) {
+    const existingEmails = sheet.getRange(2, 2, sheet.getLastRow() - 1, 1).getValues();
+    for (let i = 0; i < existingEmails.length; i++) {
+      if (existingEmails[i][0].toString().toLowerCase() === data.email.toLowerCase()) {
+        return "Your coordinates are already mapped inside our directory.";
+      }
+    }
+  }
+  
+  sheet.appendRow([timestamp, data.email]);
+  
+  // Internal Alert
+  const internalSubject = "⚡ TRIBE MEMBERSHIP EXPANSION - New Sub";
+  const internalBody = `<p>A new user has logged into the Oduwa ecosystem:</p><p><strong>Email Address:</strong> ${data.email}</p>`;
+  sendResilientEmail(INTERNAL_NOTIF_EMAIL, internalSubject, buildBrandedHtmlEmail("Mailing List Activity", internalBody), `New Subscriber registered: ${data.email}`);
 
-      {/* Music Portal (Cleaned up waiting on metadata assets) */}
-      {activePortal === 'music-portal' && (
-        <div className="overlay">
-          <div className="portal-card">
-            <h2 className="portal-title">Discography</h2>
-            <div style={{ textAlign: 'center', padding: '40px 0', color: '#ccc', letterSpacing: '0.1em', fontSize: '0.9rem' }}>
-              <p style={{ color: '#EAB308', fontWeight: 'bold' }}>SONIC ARCHIVES VAULT</p>
-              <p style={{ marginTop: '10px', fontSize: '0.8rem', color: '#888' }}>PROCESSING TRANSCENDENT FREQUENCIES • COMING SOON</p>
-            </div>
-            <button className="btn-close" onClick={closePortal}>Back</button>
-          </div>
-        </div>
-      )}
+  // Welcome Email Body
+  const subSubject = "ODUWA | Welcome to the Tribe";
+  const subBody = `
+    <p>You have entered the inner sanctum.</p>
+    <p>Your digital frequency is now synchronized directly with the ODUWA platform database. You will henceforth receive priority allocations for concert ticket releases, early access to design cycles, and secret visual archives before public distribution.</p>
+    
+    <div style="border-left: 2px solid ${COLOR_BRAND_GOLD}; padding-left: 15px; margin: 25px 0;">
+      <p style="color: #FFFFFF; font-weight: bold; margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">BELLY DANCER OUT NOW - WORLDWIDE</p>
+      <p style="margin: 5px 0 0 0; font-size: 12px; color: ${COLOR_TEXT_MUTED};">Visual systems streaming globally. Ready to transcend boundaries.</p>
+    </div>
+    
+    <p>Welcome to the collaborative frequency.</p>
+    <p style="margin-top: 30px;">In rhythm,<br><em style="color: #FFFFFF; font-style: normal; font-weight: bold;">ODUWA Inner Circle Management</em></p>
+  `;
+  sendResilientEmail(data.email, subSubject, buildBrandedHtmlEmail("Registry Verified", subBody), "Welcome to the Tribe. Your subscription is verified.");
+  
+  return "Subscription processed successfully.";
+}
 
-      {/* Bio Portal */}
-      {activePortal === 'bio-portal' && (
-        <div className="overlay">
-          <div className="portal-card">
-            <h2 className="portal-title">Biography</h2>
-            <div style={{ fontSize: '0.9rem', lineHeight: '1.7', color: '#ccc' }}>
-              <p><strong>ODUWA</strong> is more than an artist; he is a sonic architect. Born in Nigeria and raised within the vibrant polyrhythms of Afrobeat, Oduwa has spent years meticulously crafting a sound that bridges the gap between raw street energy and high-fashion luxury.</p>
-              <p>His latest single, <em>BELLY DANCER</em>, marks a daring progression in his aesthetic—layering hypnotic visual concepts over hard-hitting international syncopated grooves.</p>
-              <p>2026 marks the beginning of the Global Tour cycle, scaling up experimental visions to live crowds across borders.</p>
-            </div>
-            <button className="btn-close" onClick={closePortal}>Back</button>
-          </div>
-        </div>
-      )}
+/**
+ * Processes custom product checkout orders (Retained for future active store endpoints).
+ */
+function processCheckout(data) {
+  const ss = getTargetSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_CHECKOUTS);
+  const timestamp = new Date();
+  
+  sheet.appendRow([
+    timestamp,
+    data.name || 'Anonymous Customer',
+    data.email,
+    data.address || 'Standard Delivery',
+    data.phone || 'None provided',
+    data.items || 'Digital Order Selection',
+    "$" + (data.total || "0.00")
+  ]);
+  
+  // Internal dispatch email
+  const internalSubject = "🛒 NEW APPAREL DISPATCH ORDER - ODUWA Merch Desk";
+  const internalBody = `
+    <p>Operational Crew,</p>
+    <p>A customer has completed checking out their apparel selection:</p>
+    <div style="background-color: ${COLOR_CARD_BLACK}; border: 1px solid #1D1D1D; padding: 15px; border-radius: 8px; font-size: 13px;">
+      <p style="margin: 4px 0;"><strong>Customer Name:</strong> ${data.name || 'Not Declared'}</p>
+      <p style="margin: 4px 0;"><strong>Shipping Coordinates:</strong> ${data.address || 'Standard Delivery'}</p>
+      <p style="margin: 4px 0;"><strong>Direct Contact:</strong> ${data.phone || 'Unspecified'}</p>
+      <p style="margin: 4px 0;"><strong>Items Demanded:</strong> ${data.items || 'Standard Selection'}</p>
+      <p style="margin: 4px 0;"><strong>Total Cleared:</strong> $${data.total || '0.00'}</p>
+    </div>
+  `;
+  sendResilientEmail(INTERNAL_NOTIF_EMAIL, internalSubject, buildBrandedHtmlEmail("Apparel Desk Allocation", internalBody), "New clothing checkout registered.");
 
-      {/* Tour Portal (Updated with explicit Tix Africa connection routing) */}
-      {activePortal === 'tour-portal' && (
-        <div className="overlay">
-          <div className="portal-card">
-            <h2 className="portal-title">World Tour</h2>
-            <div style={{ textAlign: 'center', padding: '20px 0', color: '#ccc', fontSize: '0.9rem' }}>
-              <p style={{ marginBottom: '5px' }}>No live dates currently scheduled.</p>
-              <p style={{ color: '#888', marginBottom: '25px', fontSize: '0.8rem' }}>Monitor upcoming show drops via our primary ticketing engine.</p>
-              <a 
-                href="https://tix.africa" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="btn-action" 
-                style={{ display: 'inline-block', textDecoration: 'none', textAlign: 'center' }}
-              >
-                CHECK TIX AFRICA
-              </a>
-            </div>
-            <button className="btn-close" onClick={closePortal} style={{ marginTop: '15px' }}>Back</button>
-          </div>
-        </div>
-      )}
+  // Dispatch customer invoice email
+  const customerSubject = "ODUWA | Design Allocation Receipt";
+  const customerBody = `
+    <p>Dear <strong>${data.name || 'Customer'}</strong>,</p>
+    <p>Our global shipping warehouse has processed your order. The design components are selected and verified for immediate dispatching workflows.</p>
+    
+    <div style="background-color: ${COLOR_CARD_BLACK}; border: 1px solid #1D1D1D; border-radius: 8px; padding: 18px; margin: 20px 0;">
+      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Design Portfolio:</strong> ${data.items || 'Standard Selection'}</p>
+      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Consolidated Value:</strong> $${data.total || '0.00'}</p>
+      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Fulfillment Destination:</strong> ${data.address || 'Standard Delivery'}</p>
+    </div>
+    
+    <p>You will receive automated confirmation containing shipping transit tags once tracking numbers generate with courier partners.</p>
+    <p>For any inventory modifications, write to us directly at <a href="mailto:Info@oduwaiam.com" style="color: ${COLOR_BRAND_GOLD}; text-decoration: none; font-weight: bold;">Info@oduwaiam.com</a>.</p>
+    <p style="margin-top: 30px;">In collaboration,<br><em style="color: #FFFFFF; font-style: normal; font-weight: bold;">ODUWA Apparel Division</em></p>
+  `;
+  sendResilientEmail(data.email, customerSubject, buildBrandedHtmlEmail("Checkout Confirmed", customerBody), "Your order has been logged into our inventory system.");
+  
+  return "Order processed successfully.";
+}
 
-      {/* Gallery Portal (Configured with high-end placeholder layout) */}
-      {activePortal === 'gallery-portal' && (
-        <div className="overlay">
-          <div className="portal-card">
-            <h2 className="portal-title">Visuals</h2>
-            <div style={{ textAlign: 'center', padding: '40px 0', color: '#ccc', letterSpacing: '0.1em', fontSize: '0.9rem' }}>
-              <p style={{ color: '#EAB308', fontWeight: 'bold' }}>VISUAL SYSTEMS SECURED</p>
-              <p style={{ marginTop: '10px', fontSize: '0.8rem', color: '#888' }}>HIGH-RESOLUTION CINEMATIC ENGINES LOADED WITH NEXT CYCLE</p>
-            </div>
-            <button className="btn-close" onClick={closePortal}>Back</button>
-          </div>
-        </div>
-      )}
+/**
+ * Safely executes email sending processes. Checks for sender permissions, fallback routing to 
+ * active script account if "booking@kingoduwa.com" is not configured as an alias.
+ */
+function sendResilientEmail(recipient, subject, htmlBody, plainFallback) {
+  try {
+    const aliases = GmailApp.getAliases();
+    const hasAlias = aliases.indexOf(SENDER_EMAIL) > -1;
+    
+    let options = {
+      name: "ODUWA Official",
+      htmlBody: htmlBody
+    };
+    
+    if (hasAlias) {
+      options.from = SENDER_EMAIL;
+    }
+    
+    GmailApp.sendEmail(recipient, subject, plainFallback, options);
+    Logger.log("Outbound transmission queued successfully.");
+  } catch (error) {
+    Logger.log("Notice: Custom outbound alias unauthorized/inactive. Routing fallback via script execution profile. Context: " + error.toString());
+    MailApp.sendEmail({
+      to: recipient,
+      subject: subject,
+      body: plainFallback,
+      htmlBody: htmlBody
+    });
+  }
+}
 
-      {/* Join Portal */}
-      {activePortal === 'join-portal' && (
-        <div className="overlay">
-          <div className="portal-card">
-            <h2 className="portal-title">Join Tribe</h2>
-            <form onSubmit={handleSubscribeSubmit}>
-              <div className="portal-section">
-                <label className="section-label">Email</label>
-                <input type="email" placeholder="your@email.com" value={subscribeEmail} onChange={(e) => setSubscribeEmail(e.target.value)} required />
-              </div>
-              <button type="submit" className="btn-action">SUBSCRIBE</button>
-            </form>
-            <button className="btn-close" onClick={closePortal}>Back</button>
-          </div>
-        </div>
-      )}
-    </>
-  );
+/**
+ * Builds standard browser-acceptable CORS-friendly JSON packages.
+ */
+function buildJsonResponse(payload) {
+  const jsonString = JSON.stringify(payload);
+  return ContentService.createTextOutput(jsonString)
+    .setMimeType(ContentService.MimeType.JSON);
 }
