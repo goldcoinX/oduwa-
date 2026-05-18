@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css'; 
 
 // ─── GOOGLE APPS SCRIPT BACKEND ENDPOINT CONFIGURATION ───
-const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycbxcI6NsdYHUMz2lma_cx7_1-Vf1CCLkG0n9XY86_XucG5q7RDvs9D2fnDhgijF70SVkJg/exec";
+const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycbyeTB_9LXvaJwNoLmnOoLj2QRHLSENImtVaRwLcTmXs-D78cUrEgM8YpgH6kuoo5bsLOg/exec";
 
 async function sendToBackendEngine(payloadData) {
   try {
