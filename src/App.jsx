@@ -14,7 +14,7 @@ const SHEET_CHECKOUTS   = "Orders";
 
 // Mail Dispatch Configurations
 const SENDER_EMAIL         = "booking@kingoduwa.com"; // Official Sender Outbound Alias
-const INTERNAL_NOTIF_EMAIL = "booking@kingoduwa.com"; // Management Notification Endpoint
+const INTERNAL_NOTIF_EMAIL = "booking@kingoduwa.com, osas.malkin@gmail.com, the1stprinceiykebrand@gmail.com"; // Management, Artist & Manager Endpoint
 
 // Luxury Color Design Tokens
 const COLOR_BRAND_GOLD  = "#EAB308"; // Premium Gold Accent
@@ -172,8 +172,11 @@ function processBooking(data) {
       <p style="margin: 4px 0;"><strong>Budget Bracket:</strong> ${data.budget || 'Unspecified'}</p>
       <p style="margin: 4px 0;"><strong>Specific Requirements:</strong> ${data.notes || 'None declared'}</p>
     </div>
+    <p style="font-size: 11px; color: ${COLOR_BRAND_GOLD}; margin-top: 15px;">👉 <em>Tip: You can hit 'Reply' directly to this email to message this promoter.</em></p>
   `;
-  sendResilientEmail(INTERNAL_NOTIF_EMAIL, internalSubject, buildBrandedHtmlEmail("Internal Management Alert", internalBody), "A booking query has been received.");
+  
+  // Pass the promoter email to map the automatic reply header
+  sendResilientEmail(INTERNAL_NOTIF_EMAIL, internalSubject, buildBrandedHtmlEmail("Internal Management Alert", internalBody), "A booking query has been received.", data.email);
 
   // External Customer Email body compilation
   const bookerSubject = "ODUWA | Booking Inquiry Received";
@@ -280,55 +283,4 @@ function processCheckout(data) {
     
     <div style="background-color: ${COLOR_CARD_BLACK}; border: 1px solid #1D1D1D; border-radius: 8px; padding: 18px; margin: 20px 0;">
       <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Design Portfolio:</strong> ${data.items || 'Standard Selection'}</p>
-      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Consolidated Value:</strong> $${data.total || '0.00'}</p>
-      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Fulfillment Destination:</strong> ${data.address || 'Standard Delivery'}</p>
-    </div>
-    
-    <p>You will receive automated confirmation containing shipping transit tags once tracking numbers generate with courier partners.</p>
-    <p>For any inventory modifications, write to us directly at <a href="mailto:Info@oduwaiam.com" style="color: ${COLOR_BRAND_GOLD}; text-decoration: none; font-weight: bold;">Info@oduwaiam.com</a>.</p>
-    <p style="margin-top: 30px;">In collaboration,<br><em style="color: #FFFFFF; font-style: normal; font-weight: bold;">ODUWA Apparel Division</em></p>
-  `;
-  sendResilientEmail(data.email, customerSubject, buildBrandedHtmlEmail("Checkout Confirmed", customerBody), "Your order has been logged into our inventory system.");
-  
-  return "Order processed successfully.";
-}
-
-/**
- * Safely executes email sending processes. Checks for sender permissions, fallback routing to 
- * active script account if "booking@kingoduwa.com" is not configured as an alias.
- */
-function sendResilientEmail(recipient, subject, htmlBody, plainFallback) {
-  try {
-    const aliases = GmailApp.getAliases();
-    const hasAlias = aliases.indexOf(SENDER_EMAIL) > -1;
-    
-    let options = {
-      name: "ODUWA Official",
-      htmlBody: htmlBody
-    };
-    
-    if (hasAlias) {
-      options.from = SENDER_EMAIL;
-    }
-    
-    GmailApp.sendEmail(recipient, subject, plainFallback, options);
-    Logger.log("Outbound transmission queued successfully.");
-  } catch (error) {
-    Logger.log("Notice: Custom outbound alias unauthorized/inactive. Routing fallback via script execution profile. Context: " + error.toString());
-    MailApp.sendEmail({
-      to: recipient,
-      subject: subject,
-      body: plainFallback,
-      htmlBody: htmlBody
-    });
-  }
-}
-
-/**
- * Builds standard browser-acceptable CORS-friendly JSON packages.
- */
-function buildJsonResponse(payload) {
-  const jsonString = JSON.stringify(payload);
-  return ContentService.createTextOutput(jsonString)
-    .setMimeType(ContentService.MimeType.JSON);
-}
+      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Consolidated Value:</strong> $${data.total || '
