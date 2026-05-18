@@ -283,4 +283,65 @@ function processCheckout(data) {
     
     <div style="background-color: ${COLOR_CARD_BLACK}; border: 1px solid #1D1D1D; border-radius: 8px; padding: 18px; margin: 20px 0;">
       <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Design Portfolio:</strong> ${data.items || 'Standard Selection'}</p>
-      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Consolidated Value:</strong> $${data.total || '
+      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Consolidated Value:</strong> $${data.total || '0.00'}</p>
+      <p style="margin: 4px 0; font-size: 12px;"><strong style="color: ${COLOR_BRAND_GOLD};">Fulfillment Destination:</strong> ${data.address || 'Standard Delivery'}</p>
+    </div>
+    
+    <p>You will receive automated confirmation containing shipping transit tags once tracking numbers generate with courier partners.</p>
+    <p>For any inventory modifications, write to us directly at <a href="mailto:booking@kingoduwa.com" style="color: ${COLOR_BRAND_GOLD}; text-decoration: none; font-weight: bold;">booking@kingoduwa.com</a>.</p>
+    <p style="margin-top: 30px;">In collaboration,<br><em style="color: #FFFFFF; font-style: normal; font-weight: bold;">ODUWA Apparel Division</em></p>
+  `;
+  sendResilientEmail(data.email, customerSubject, buildBrandedHtmlEmail("Checkout Confirmed", customerBody), "Your order has been logged into our inventory system.");
+  
+  return "Order processed successfully.";
+}
+
+/**
+ * Safely executes email sending processes with dynamic alias verification and replyTo headers.
+ */
+function sendResilientEmail(recipient, subject, htmlBody, plainFallback, replyToAddress) {
+  try {
+    const aliases = GmailApp.getAliases();
+    const hasAlias = aliases.indexOf(SENDER_EMAIL) > -1;
+    
+    let options = {
+      name: "ODUWA Official",
+      htmlBody: htmlBody
+    };
+    
+    if (hasAlias) {
+      options.from = SENDER_EMAIL;
+    }
+    
+    if (replyToAddress) {
+      options.replyTo = replyToAddress;
+    }
+    
+    GmailApp.sendEmail(recipient, subject, plainFallback, options);
+    Logger.log("Outbound transmission queued successfully.");
+  } catch (error) {
+    Logger.log("Notice: Custom outbound alias unauthorized/inactive. Routing fallback via script execution profile. Context: " + error.toString());
+    
+    let fallbackOptions = {
+      to: recipient,
+      subject: subject,
+      body: plainFallback,
+      htmlBody: htmlBody
+    };
+    
+    if (replyToAddress) {
+      fallbackOptions.replyTo = replyToAddress;
+    }
+    
+    MailApp.sendEmail(fallbackOptions);
+  }
+}
+
+/**
+ * Builds standard browser-acceptable CORS-friendly JSON packages.
+ */
+function buildJsonResponse(payload) {
+  const jsonString = JSON.stringify(payload);
+  return ContentService.createTextOutput(jsonString)
+    .setMimeType(ContentService.MimeType.JSON);
+}
