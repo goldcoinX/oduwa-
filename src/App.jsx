@@ -23,7 +23,6 @@ async function sendToBackendEngine(payloadData) {
 
 export default function App() {
   const [activePortal, setActivePortal] = useState(null);
-  const [cart, setCart] = useState([]);
   const [toastMsg, setToastMsg] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
 
@@ -55,16 +54,11 @@ export default function App() {
     document.body.style.overflow = 'auto';
   };
 
-  const addToCart = (name, price) => {
-    setCart([...cart, { name, price }]);
-    showToast(`Added ${name} to Cart`);
-  };
-
   // ─── LIVE BACKEND HANDLERS ───
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     showToast('Sending Booking Request...');
-    
+     
     const payload = {
       action: 'booking',
       name: bookingName,
@@ -78,7 +72,6 @@ export default function App() {
     const result = await sendToBackendEngine(payload);
     if (result.success) {
       showToast('Booking Request Received.');
-      // Flush form states
       setBookingName('');
       setBookingEmail('');
       setBookingDate('');
@@ -103,32 +96,6 @@ export default function App() {
       closePortal();
     }
   };
-
-  const handleCheckoutSubmit = async () => {
-    const customerEmail = prompt("Please enter your email to complete your design allocation order:");
-    if (!customerEmail) return;
-
-    showToast('Processing Checkout...');
-
-    const payload = {
-      action: 'checkout',
-      name: 'Web Store Customer',
-      email: customerEmail,
-      address: 'Digital Processing Queue',
-      phone: 'None Provided',
-      items: cart.map(item => `${item.name}`).join(', '),
-      total: cartTotal.toFixed(2)
-    };
-
-    const result = await sendToBackendEngine(payload);
-    if (result.success) {
-      setCart([]);
-      showToast('Order Logged Successfully.');
-      closePortal();
-    }
-  };
-
-  const cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
     <>
@@ -215,72 +182,28 @@ export default function App() {
         </div>
       )}
 
-      {/* Merch Portal */}
+      {/* Merch Portal (Configured with elegant placeholder) */}
       {activePortal === 'merch-portal' && (
         <div className="overlay">
           <div className="portal-card">
-            <h2 className="portal-title">Merch</h2>
-            <div className="disco-grid">
-              <div className="disco-item" onClick={() => addToCart('Inflection Tee', 45)}>
-                <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=300" className="disco-img" alt="Tee" />
-                <div className="disco-title">Inflection Tee • $45</div>
-              </div>
-              <div className="disco-item" onClick={() => addToCart('Studio Hoodie', 85)}>
-                <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=300" className="disco-img" alt="Hoodie" />
-                <div className="disco-title">Studio Hoodie • $85</div>
-              </div>
+            <h2 className="portal-title">Merch Store</h2>
+            <div style={{ textAlign: 'center', padding: '40px 0', color: '#ccc', letterSpacing: '0.1em', fontSize: '0.9rem' }}>
+              <p style={{ color: '#EAB308', fontWeight: 'bold' }}>BELLY DANCER CAPSULE COLLECTION</p>
+              <p style={{ marginTop: '10px', fontSize: '0.8rem', color: '#888' }}>LOCKING DOWN INVENTORY LINES • DROPPING SOON</p>
             </div>
-            {cart.length > 0 && (
-              <div className="cart-status">
-                <div className="section-label">Your Cart</div>
-                <div>
-                  {cart.map((item, i) => (
-                    <div key={i} className="cart-item-row">
-                      <span>{item.name}</span><span>${item.price}</span>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ borderTop: '1px solid #333', marginTop: '10px', paddingTop: '10px', fontWeight: '700', display: 'flex', justifyContent: 'space-between' }}>
-                  <span>TOTAL</span><span>${cartTotal}</span>
-                </div>
-                <button className="btn-action" onClick={handleCheckoutSubmit}>CHECKOUT</button>
-              </div>
-            )}
             <button className="btn-close" onClick={closePortal}>Back</button>
           </div>
         </div>
       )}
 
-      {/* Music Portal */}
+      {/* Music Portal (Cleaned up waiting on metadata assets) */}
       {activePortal === 'music-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Discography</h2>
-            <div className="disco-grid">
-              <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44pfv7dn4/Belly%20Dancer.jpg" className="disco-img" alt="BELLY DANCER" />
-                <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>BELLY DANCER (NEW)</div>
-              </a>
-              <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/INFLECTION.png" className="disco-img" alt="INFLECTION" />
-                <div className="disco-title">INFLECTION</div>
-              </a>
-              <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/OVBIALEKE.png" className="disco-img" alt="OVBIALEKE" />
-                <div className="disco-title">OVBIALEKE</div>
-              </a>
-              <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/MADE%20FOR%20APP%20.png" className="disco-img" alt="MADE FOR YOU" />
-                <div className="disco-title">MADE FOR YOU</div>
-              </a>
-              <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/SON%20OF%20MAN.png" className="disco-img" alt="SON OF MAN" />
-                <div className="disco-title">SON OF MAN</div>
-              </a>
-              <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/WONDERFUL.png" className="disco-img" alt="WONDERFUL" />
-                <div className="disco-title">WONDERFUL</div>
-              </a>
+            <div style={{ textAlign: 'center', padding: '40px 0', color: '#ccc', letterSpacing: '0.1em', fontSize: '0.9rem' }}>
+              <p style={{ color: '#EAB308', fontWeight: 'bold' }}>SONIC ARCHIVES VAULT</p>
+              <p style={{ marginTop: '10px', fontSize: '0.8rem', color: '#888' }}>PROCESSING TRANSCENDENT FREQUENCIES • COMING SOON</p>
             </div>
             <button className="btn-close" onClick={closePortal}>Back</button>
           </div>
@@ -302,31 +225,37 @@ export default function App() {
         </div>
       )}
 
-      {/* Tour Portal */}
+      {/* Tour Portal (Updated with explicit Tix Africa connection routing) */}
       {activePortal === 'tour-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">World Tour</h2>
-            <div style={{ fontSize: '0.8rem' }}>
-              <div style={{ borderBottom: '1px solid #222', padding: '15px 0', display: 'flex', justifyContent: 'space-between' }}><span>LAGOS • EKO HOTEL</span><span>MAY 12</span></div>
-              <div style={{ borderBottom: '1px solid #222', padding: '15px 0', display: 'flex', justifyContent: 'space-between' }}><span>LONDON • O2 ACADEMY</span><span>JUN 03</span></div>
-              <div style={{ borderBottom: '1px solid #222', padding: '15px 0', display: 'flex', justifyContent: 'space-between' }}><span>NYC • MADISON SQ GARDEN</span><span>JUL 15</span></div>
+            <div style={{ textAlign: 'center', padding: '20px 0', color: '#ccc', fontSize: '0.9rem' }}>
+              <p style={{ marginBottom: '5px' }}>No live dates currently scheduled.</p>
+              <p style={{ color: '#888', marginBottom: '25px', fontSize: '0.8rem' }}>Monitor upcoming show drops via our primary ticketing engine.</p>
+              <a 
+                href="https://tix.africa" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="btn-action" 
+                style={{ display: 'inline-block', textDecoration: 'none', textAlign: 'center' }}
+              >
+                CHECK TIX AFRICA
+              </a>
             </div>
-            <button className="btn-close" onClick={closePortal}>Back</button>
+            <button className="btn-close" onClick={closePortal} style={{ marginTop: '15px' }}>Back</button>
           </div>
         </div>
       )}
 
-      {/* Gallery Portal */}
+      {/* Gallery Portal (Configured with high-end placeholder layout) */}
       {activePortal === 'gallery-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Visuals</h2>
-            <div className="disco-grid">
-              <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300" className="disco-img" alt="Visual 1" />
-              <img src="https://images.unsplash.com/photo-1501612780327-45045538702b?w=300" className="disco-img" alt="Visual 2" />
-              <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300" className="disco-img" alt="Visual 3" />
-              <img src="https://images.unsplash.com/photo-1459749411177-042180ce673c?w=300" className="disco-img" alt="Visual 4" />
+            <div style={{ textAlign: 'center', padding: '40px 0', color: '#ccc', letterSpacing: '0.1em', fontSize: '0.9rem' }}>
+              <p style={{ color: '#EAB308', fontWeight: 'bold' }}>VISUAL SYSTEMS SECURED</p>
+              <p style={{ marginTop: '10px', fontSize: '0.8rem', color: '#888' }}>HIGH-RESOLUTION CINEMATIC ENGINES LOADED WITH NEXT CYCLE</p>
             </div>
             <button className="btn-close" onClick={closePortal}>Back</button>
           </div>
