@@ -37,7 +37,6 @@ export default function App() {
   const [subscribeEmail, setSubscribeEmail] = useState('');
 
   useEffect(() => {
-    // Force video to play to bypass mobile browser limits where possible
     if (videoRef.current) {
       videoRef.current.play().catch(error => {
         console.log("Browser prevented autoplay (likely Low Power Mode):", error);
@@ -85,7 +84,6 @@ export default function App() {
     const result = await sendToBackendEngine(payload);
     if (result.success) {
       showToast('Booking Request Received.');
-      // Flush form states
       setBookingName('');
       setBookingEmail('');
       setBookingDate('');
