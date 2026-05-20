@@ -144,7 +144,8 @@ export default function App() {
 
         {/* NAVIGATION LINKS */}
         <nav>
-          <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="nav-inflection">BELLY DANCER</a>
+          {/* Text updated here from BELLY DANCER to KINGODUWA */}
+          <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="nav-inflection">KINGODUWA</a>
           
           <a href="https://www.youtube.com/@ODUWAIAM?sub_confirmation=1" target="_blank" rel="noreferrer" className="nav-video">VIDEO <span className="bling">●</span></a>
           <a onClick={() => openPortal('booking-portal')} className="nav-booking">BOOKING <span className="bling">●</span></a>
@@ -160,7 +161,6 @@ export default function App() {
 
         <div className="scroll-footer-area">
           <footer>
-            {/* EMAIL HAS BEEN CONVERTED TO YOUR PRODUCTION ENDPOINT */}
             <a href="mailto:booking@kingoduwa.com" className="footer-email">booking@kingoduwa.com</a>
             <div style={{ letterSpacing: '0.1em', fontSize: '0.6rem' }}>&copy; ODUWA 2026 | ALL RIGHTS RESERVED</div>
           </footer>
