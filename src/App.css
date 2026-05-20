@@ -181,8 +181,34 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
 
 .cart-status { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 4px; margin-top: 20px; border: 1px dashed #333; font-size: 0.8rem; }
 .cart-item-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
-.toast-message { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #fff; color: #000; padding: 12px 24px; z-index: 2000; font-family: var(--font-main); font-weight: 800; text-transform: uppercase; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); opacity: 0; pointer-events: none; text-align: center; font-size: 0.75rem; }
-.toast-message.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* TOAST MESSAGE CSS (Updated to allow clicking) */
+.toast-message { 
+    position: fixed; 
+    bottom: 30px; 
+    left: 50%; 
+    transform: translateX(-50%) translateY(100px); 
+    background: #fff; 
+    color: #000; 
+    padding: 12px 24px; 
+    z-index: 2000; 
+    font-family: var(--font-main); 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+    opacity: 0; 
+    pointer-events: none; 
+    text-align: center; 
+    font-size: 0.75rem; 
+}
+.toast-message.show { 
+    transform: translateX(-50%) translateY(0); 
+    opacity: 1; 
+    /* This allows the toast to be clicked when visible */
+    pointer-events: auto; 
+}
+
 .disco-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
 .disco-item { text-align: center; text-decoration: none; cursor: pointer; }
 .disco-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border: 1px solid #222; margin-bottom: 6px; }
