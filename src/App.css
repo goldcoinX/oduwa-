@@ -67,9 +67,10 @@ nav a:hover { color: #aaa; transform: scale(1.05); }
     top: 12%; 
     left: 0; 
     right: 0;
-    font-size: clamp(32px, 7.8vw, 110px); 
+    /* Scaled down maximum clamp layout size for desktop view */
+    font-size: clamp(32px, 6.2vw, 76px); 
     z-index: 50; 
-    letter-spacing: -0.05em; 
+    letter-spacing: -0.02em; 
     font-weight: 800; 
     text-align: center;
     animation: revealText 1.5s forwards !important; 
@@ -154,8 +155,9 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
 @media (max-width: 768px) {
     .nav-inflection { 
         top: 14%; 
-        font-size: clamp(28px, 8.5vw, 48px); 
-        letter-spacing: -0.03em;
+        /* Reduced header sizing for mobile layout views */
+        font-size: clamp(24px, 7vw, 36px); 
+        letter-spacing: -0.02em;
     }
     
     nav a { 
@@ -172,7 +174,9 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
     
     /* Coordinates centered symmetrically with the new proportional widths */
     .nav-video { top: 32%; left: 6%; }
-    .nav-bio { top: 32%; right: 6%; }
+    
+    /* BIO alignment fix: clears the desktop positioning value out on mobile views */
+    .nav-bio { top: 32%; right: 6%; left: auto; }
 
     .nav-booking { top: 44%; left: 6%; }
     .nav-tour { top: 44%; right: 6%; }
