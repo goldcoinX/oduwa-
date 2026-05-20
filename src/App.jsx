@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css'; 
 
 // ─── GOOGLE APPS SCRIPT BACKEND ENDPOINT CONFIGURATION ───
@@ -26,6 +26,7 @@ export default function App() {
   const [cart, setCart] = useState([]);
   const [toastMsg, setToastMsg] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
+  const videoRef = useRef(null);
 
   // ─── FORM INPUT STATES FOR DATABASE BINDINGS ───
   const [bookingName, setBookingName] = useState('');
@@ -36,6 +37,12 @@ export default function App() {
   const [subscribeEmail, setSubscribeEmail] = useState('');
 
   useEffect(() => {
+    // Force video to play to bypass mobile browser limits where possible
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.log("Browser prevented autoplay (likely Low Power Mode):", error);
+      });
+    }
     setTimeout(() => showToast("Belly Dancer Season Out Now"), 1500);
   }, []);
 
@@ -136,7 +143,7 @@ export default function App() {
         
         {/* VIDEO BACKGROUND CONTAINER */}
         <div className="hero-container">
-          <video autoPlay loop muted playsInline className="background-video">
+          <video ref={videoRef} autoPlay loop muted playsInline className="background-video">
             <source src="https://res.cloudinary.com/dccxjo9x8/video/upload/v1778949878/backgroundVideo_qpjurc.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
@@ -144,8 +151,10 @@ export default function App() {
 
         {/* NAVIGATION LINKS */}
         <nav>
-          {/* Text updated here from BELLY DANCER to KINGODUWA */}
-          <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="nav-inflection">KINGODUWA</a>
+          <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="nav-inflection">
+            <img src="https://uploads.onecompiler.io/44jjpumhc/44pucqy4w/KING%20ODUWA%20HOME%20LOGO.svg" alt="King Oduwa Logo" className="nav-logo" />
+            KINGODUWA
+          </a>
           
           <a href="https://www.youtube.com/@ODUWAIAM?sub_confirmation=1" target="_blank" rel="noreferrer" className="nav-video">VIDEO <span className="bling">●</span></a>
           <a onClick={() => openPortal('booking-portal')} className="nav-booking">BOOKING <span className="bling">●</span></a>
