@@ -64,10 +64,9 @@ nav a:hover { color: #aaa; transform: scale(1.05); }
 
 /* COORDINATES FOR THE MAIN SINGLE HEADER TITLE */
 .nav-inflection { 
-    top: 6%; 
+    top: 5%; 
     left: 0; 
     right: 0;
-    /* Dramatically reduced font size for desktop layout balance */
     font-size: clamp(20px, 3.5vw, 45px); 
     z-index: 50; 
     letter-spacing: -0.02em; 
@@ -76,22 +75,26 @@ nav a:hover { color: #aaa; transform: scale(1.05); }
     animation: revealText 1.5s forwards !important; 
     text-shadow: 0px 8px 30px rgba(0,0,0,0.8);
     
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
     width: 100%;
     box-sizing: border-box;
     padding: 0 4%;
-    gap: 8px; /* Tighter gap between logo and text */
+    gap: 10px;
 }
 
-/* NEW: LOGO STYLING */
+/* FIX: FORCED SOLID DISPLAY AND HEIGHT CONSTRAINTS FOR SVG CODES */
 .nav-logo {
-    /* Reduced logo size slightly to match the smaller text scale */
-    width: clamp(40px, 5vw, 75px); 
-    height: auto;
-    filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.8));
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 60px !important;
+    height: 60px !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.8)) !important;
     transition: var(--transition);
 }
 
@@ -188,18 +191,20 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
 /* RE-ENGINEERED MOBILE RESPONSIVE SCATTER VIEW OVERRIDES */
 @media (max-width: 768px) {
     .nav-inflection { 
-        top: 8%; 
-        /* Reduced header sizing for mobile layout views */
+        top: 6%; 
         font-size: clamp(18px, 6vw, 28px); 
         letter-spacing: -0.02em;
-        gap: 6px; 
+        gap: 8px; 
+    }
+    
+    .nav-logo {
+        width: 45px !important;
+        height: 45px !important;
     }
     
     nav a { 
         font-size: 13px;
         animation: revealText 1s forwards, uniformFloat 4s ease-in-out infinite alternate !important;
-        
-        /* Forces uniform width container sizing on mobile buttons */
         width: 110px;
         box-sizing: border-box;
         display: inline-flex;
@@ -207,18 +212,12 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
         justify-content: center;
     }
     
-    /* Coordinates centered symmetrically with the new proportional widths */
     .nav-video { top: 32%; left: 6%; }
-    
-    /* BIO alignment fix: clears the desktop positioning value out on mobile views */
     .nav-bio { top: 32%; right: 6%; left: auto; }
-
     .nav-booking { top: 44%; left: 6%; }
     .nav-tour { top: 44%; right: 6%; }
-    
     .nav-merch { top: 58%; left: 6%; }
     .nav-music { top: 58%; right: 6%; }
-    
     .nav-gallery { bottom: 22%; left: 6%; }
     .nav-join { bottom: 22%; right: 6%; }
 
