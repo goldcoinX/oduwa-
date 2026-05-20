@@ -64,10 +64,10 @@ nav a:hover { color: #aaa; transform: scale(1.05); }
 
 /* COORDINATES FOR THE MAIN SINGLE HEADER TITLE */
 .nav-inflection { 
-    top: 12%; 
+    /* Pushed up slightly so the logo has room */
+    top: 8%; 
     left: 0; 
     right: 0;
-    /* Scaled down maximum clamp layout size for desktop view */
     font-size: clamp(32px, 6.2vw, 76px); 
     z-index: 50; 
     letter-spacing: -0.02em; 
@@ -75,10 +75,24 @@ nav a:hover { color: #aaa; transform: scale(1.05); }
     text-align: center;
     animation: revealText 1.5s forwards !important; 
     text-shadow: 0px 8px 30px rgba(0,0,0,0.8);
-    display: block;
+    
+    /* Layout changed to flex so logo stacks cleanly on top of text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     box-sizing: border-box;
     padding: 0 4%;
+    gap: 12px;
+}
+
+/* NEW: LOGO STYLING */
+.nav-logo {
+    width: clamp(55px, 8vw, 100px); 
+    height: auto;
+    filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.8));
+    transition: var(--transition);
 }
 
 .nav-video { top: 38%; left: 10%; animation-delay: 0.1s; }
@@ -141,7 +155,27 @@ footer { text-align: center; opacity: 0.5; }
 .section-label { display: block; margin-bottom: 8px; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.15em; color: #888; text-transform: uppercase; }
 input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; background: #000; color: #fff; font-family: var(--font-body); box-sizing: border-box; font-size: 14px; }
 .btn-action { background: #fff; color: #000; border: none; padding: 16px; cursor: pointer; font-family: var(--font-main); font-weight: 700; width: 100%; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 10px; }
-.btn-close { margin-top: 20px; background: none; border: none; font-size: 0.65rem; cursor: pointer; color: #444; width: 100%; text-transform: uppercase; letter-spacing: 0.2em; }
+
+/* RE-ENGINEERED BACK / CLOSE BUTTON */
+.btn-close { 
+    margin-top: 25px; 
+    background: none; 
+    border: none; 
+    font-size: 0.9rem; 
+    font-weight: 800;
+    font-family: var(--font-main);
+    cursor: pointer; 
+    color: #ffffff; 
+    width: 100%; 
+    text-transform: uppercase; 
+    letter-spacing: 0.2em; 
+    transition: 0.3s ease;
+}
+.btn-close:hover {
+    color: #aaa;
+    transform: scale(1.02);
+}
+
 .cart-status { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 4px; margin-top: 20px; border: 1px dashed #333; font-size: 0.8rem; }
 .cart-item-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
 .toast-message { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #fff; color: #000; padding: 12px 24px; z-index: 2000; font-family: var(--font-main); font-weight: 800; text-transform: uppercase; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); opacity: 0; pointer-events: none; text-align: center; font-size: 0.75rem; }
@@ -154,10 +188,11 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
 /* RE-ENGINEERED MOBILE RESPONSIVE SCATTER VIEW OVERRIDES */
 @media (max-width: 768px) {
     .nav-inflection { 
-        top: 14%; 
-        /* Reduced header sizing for mobile layout views */
+        /* Pushed up slightly for mobile as well */
+        top: 10%; 
         font-size: clamp(24px, 7vw, 36px); 
         letter-spacing: -0.02em;
+        gap: 8px; /* Slightly tighter gap on mobile */
     }
     
     nav a { 
