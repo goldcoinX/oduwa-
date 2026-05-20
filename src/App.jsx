@@ -25,6 +25,7 @@ export default function App() {
   const [activePortal, setActivePortal] = useState(null);
   const [cart, setCart] = useState([]);
   const [toastMsg, setToastMsg] = useState('');
+  const [toastUrl, setToastUrl] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
   const videoRef = useRef(null);
 
@@ -42,13 +43,17 @@ export default function App() {
         console.log("Browser prevented autoplay (likely Low Power Mode):", error);
       });
     }
-    setTimeout(() => showToast("Belly Dancer Season Out Now"), 1500);
+    // Updated to pass the Linktree URL so the initial popup becomes clickable
+    setTimeout(() => showToast("Belly Dancer Season Out Now", "https://linktr.ee/oduwa"), 1500);
   }, []);
 
-  const showToast = (msg) => {
+  const showToast = (msg, url = '') => {
     setToastMsg(msg);
+    setToastUrl(url);
     setIsToastVisible(true);
-    setTimeout(() => setIsToastVisible(false), 3000);
+    
+    // Gives the user slightly more time to click the link before it fades
+    setTimeout(() => setIsToastVisible(false), url ? 4000 : 3000); 
   };
 
   const openPortal = (id) => {
@@ -149,8 +154,8 @@ export default function App() {
 
         {/* NAVIGATION LINKS */}
         <nav>
-          <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="nav-inflection">
-            <img src="https://uploads.onecompiler.io/44jjpumhc/44pucqy4w/KING%20ODUWA%20HOME%20LOGO.svg" alt="King Oduwa Logo" className="nav-logo" />
+          <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="nav-inflection">
+            <img src="https://uploads.onecompiler.io/44jjpumhc/44puf5qex/KO%20LOGO%20SYMBOL.svg" alt="King Oduwa Logo" className="nav-logo" />
             KINGODUWA
           </a>
           
@@ -181,7 +186,16 @@ export default function App() {
         </div>
       </div>
 
-      <div className={`toast-message ${isToastVisible ? 'show' : ''}`}>{toastMsg}</div>
+      {/* DYNAMIC TOAST MESSAGE (Link vs Plain Text) */}
+      {toastUrl ? (
+        <a href={toastUrl} target="_blank" rel="noreferrer" className={`toast-message ${isToastVisible ? 'show' : ''}`} style={{ textDecoration: 'none', cursor: 'pointer' }}>
+          {toastMsg} <span style={{ fontSize: '0.8em', marginLeft: '5px' }}>↗</span>
+        </a>
+      ) : (
+        <div className={`toast-message ${isToastVisible ? 'show' : ''}`}>
+          {toastMsg}
+        </div>
+      )}
 
       {/* Booking Portal */}
       {activePortal === 'booking-portal' && (
@@ -265,11 +279,11 @@ export default function App() {
           <div className="portal-card">
             <h2 className="portal-title">Discography</h2>
             <div className="disco-grid">
-              <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="disco-item">
+              <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://uploads.onecompiler.io/44jjpumhc/44pfv7dn4/Belly%20Dancer.jpg" className="disco-img" alt="BELLY DANCER" />
                 <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>BELLY DANCER (NEW)</div>
               </a>
-              <a href="https://unitedmasters.com/m/inflection" target="_blank" rel="noreferrer" className="disco-item">
+              <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/INFLECTION.png" className="disco-img" alt="INFLECTION" />
                 <div className="disco-title">INFLECTION</div>
               </a>
