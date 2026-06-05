@@ -47,7 +47,8 @@ export default function App() {
         console.log("Browser prevented autoplay (likely Low Power Mode):", error);
       });
     }
-    setTimeout(() => showToast("Belly Dancer Season Out Now", "https://linktr.ee/oduwa"), 1500);
+    // Updated to point the toast pop-up to the new fanlink URL
+    setTimeout(() => showToast("Belly Dancer Season Out Now", "https://fanlink.tv/xaFj"), 1500);
   }, []);
 
   const showToast = (msg, url = '') => {
@@ -156,7 +157,8 @@ export default function App() {
 
         {/* NAVIGATION LINKS */}
         <nav>
-          <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="nav-inflection">
+          {/* UPDATED MAIN LOGO & TEXT URL */}
+          <a href="https://fanlink.tv/xaFj" target="_blank" rel="noreferrer" className="nav-inflection">
             <img src="https://uploads.onecompiler.io/44jjpumhc/1780638127727/logo%20Kingoduwa.png" alt="King Oduwa Logo" className="nav-logo" />
             KINGODUWA
           </a>
@@ -260,7 +262,8 @@ export default function App() {
           <div className="portal-card">
             <h2 className="portal-title">Discography</h2>
             <div className="disco-grid">
-              <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
+              {/* UPDATED BELLY DANCER URL */}
+              <a href="https://fanlink.tv/xaFj" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://uploads.onecompiler.io/44jjpumhc/44pfv7dn4/Belly%20Dancer.jpg" className="disco-img" alt="BELLY DANCER" />
                 <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>BELLY DANCER (NEW)</div>
               </a>
@@ -316,7 +319,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Gallery Portal ── ATTACHED THE CLICK INJECTION EVENT TO EACH INTERFACE */}
+      {/* Gallery Portal */}
       {activePortal === 'gallery-portal' && (
         <div className="overlay">
           <div className="portal-card">
@@ -351,7 +354,7 @@ export default function App() {
         </div>
       )}
 
-      {/* NEW: THE MODERN LIGHTBOX PREVIEW OVERLAY SYSTEM */}
+      {/* THE MODERN LIGHTBOX PREVIEW OVERLAY SYSTEM */}
       {previewImage && (
         <div className="lightbox-overlay" onClick={() => setPreviewImage(null)}>
           <div className="lightbox-wrapper">
