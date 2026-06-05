@@ -27,6 +27,10 @@ export default function App() {
   const [toastMsg, setToastMsg] = useState('');
   const [toastUrl, setToastUrl] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
+  
+  // NEW STATE MODULE FOR THE CHOSEN PREVIEW IMAGE
+  const [previewImage, setPreviewImage] = useState(null);
+  
   const videoRef = useRef(null);
 
   // ─── FORM INPUT STATES FOR DATABASE BINDINGS ───
@@ -60,6 +64,7 @@ export default function App() {
 
   const closePortal = () => {
     setActivePortal(null);
+    setPreviewImage(null); // Reset preview layer when core portal terminates
     document.body.style.overflow = 'auto';
   };
 
@@ -311,18 +316,18 @@ export default function App() {
         </div>
       )}
 
-      {/* Gallery Portal ── PLACED ALL CHOSEN CUSTOM IMAGES HERE */}
+      {/* Gallery Portal ── ATTACHED THE CLICK INJECTION EVENT TO EACH INTERFACE */}
       {activePortal === 'gallery-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Visuals</h2>
             <div className="disco-grid">
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640923591/Home%20Page%20.jpg" className="disco-img" alt="Oduwa Visual 1" />
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640661544/GALLERY_Page.jpg" className="disco-img" alt="Oduwa Visual 2" />
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640937551/JOIN_Page%20.jpg" className="disco-img" alt="Oduwa Visual 3" />
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg" className="disco-img" alt="Oduwa Visual 4" />
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg" className="disco-img" alt="Oduwa Visual 5" />
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640959828/Vibe%20.jpg" className="disco-img" alt="Oduwa Visual 6" />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640923591/Home%20Page%20.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 1" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640923591/Home%20Page%20.jpg")} />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640661544/GALLERY_Page.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 2" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640661544/GALLERY_Page.jpg")} />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640937551/JOIN_Page%20.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 3" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640937551/JOIN_Page%20.jpg")} />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 4" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg")} />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 5" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg")} />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640959828/Vibe%20.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 6" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640959828/Vibe%20.jpg")} />
             </div>
             <button className="btn-close" onClick={closePortal}>Back</button>
           </div>
@@ -342,6 +347,16 @@ export default function App() {
               <button type="submit" className="btn-action">SUBSCRIBE</button>
             </form>
             <button className="btn-close" onClick={closePortal}>Back</button>
+          </div>
+        </div>
+      )}
+
+      {/* NEW: THE MODERN LIGHTBOX PREVIEW OVERLAY SYSTEM */}
+      {previewImage && (
+        <div className="lightbox-overlay" onClick={() => setPreviewImage(null)}>
+          <div className="lightbox-wrapper">
+            <img src={previewImage} alt="Expanded Media View" className="lightbox-content" />
+            <div className="lightbox-hint">Tap anywhere to return</div>
           </div>
         </div>
       )}
