@@ -85,7 +85,7 @@ nav a:hover { color: #aaa; transform: scale(1.05); }
     gap: 10px;
 }
 
-/* FIX: FORCED SOLID DISPLAY AND HEIGHT CONSTRAINTS FOR SVG CODES */
+/* LOGO POSITIONING & CONSTRAINTS */
 .nav-logo {
     display: block !important;
     visibility: visible !important;
@@ -179,10 +179,23 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
     transform: scale(1.02);
 }
 
+/* COMING SOON BANNER LAYOUT CLASS */
+.coming-soon-banner {
+    font-family: var(--font-main);
+    font-size: clamp(1.2rem, 4vw, 2.2rem);
+    font-weight: 800;
+    color: #ffffff;
+    text-align: center;
+    letter-spacing: 0.15em;
+    padding: 60px 0;
+    opacity: 0.9;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
 .cart-status { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 4px; margin-top: 20px; border: 1px dashed #333; font-size: 0.8rem; }
 .cart-item-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
 
-/* TOAST MESSAGE CSS (Updated to allow clicking) */
+/* TOAST MESSAGE CSS */
 .toast-message { 
     position: fixed; 
     bottom: 30px; 
@@ -205,7 +218,6 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
 .toast-message.show { 
     transform: translateX(-50%) translateY(0); 
     opacity: 1; 
-    /* This allows the toast to be clicked when visible */
     pointer-events: auto; 
 }
 
