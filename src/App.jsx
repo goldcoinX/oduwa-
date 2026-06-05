@@ -152,7 +152,6 @@ export default function App() {
         {/* NAVIGATION LINKS */}
         <nav>
           <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="nav-inflection">
-            {/* NEW LOGO IMAGE ASSET APPLIED */}
             <img src="https://uploads.onecompiler.io/44jjpumhc/1780638127727/logo%20Kingoduwa.png" alt="King Oduwa Logo" className="nav-logo" />
             KINGODUWA
           </a>
@@ -235,7 +234,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Merch Portal (Updated with Coming Soon banner placement) */}
+      {/* Merch Portal */}
       {activePortal === 'merch-portal' && (
         <div className="overlay">
           <div className="portal-card">
@@ -250,7 +249,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Music Portal */}
+      {/* Music Portal (MADE FOR YOU card removed successfully) */}
       {activePortal === 'music-portal' && (
         <div className="overlay">
           <div className="portal-card">
@@ -267,10 +266,6 @@ export default function App() {
               <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/OVBIALEKE.png" className="disco-img" alt="OVBIALEKE" />
                 <div className="disco-title">OVBIALEKE</div>
-              </a>
-              <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/MADE%20FOR%20APP%20.png" className="disco-img" alt="MADE FOR YOU" />
-                <div className="disco-title">MADE FOR YOU</div>
               </a>
               <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/SON%20OF%20MAN.png" className="disco-img" alt="SON OF MAN" />
@@ -301,7 +296,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Tour Portal (Updated with Coming Soon banner placement) */}
+      {/* Tour Portal */}
       {activePortal === 'tour-portal' && (
         <div className="overlay">
           <div className="portal-card">
