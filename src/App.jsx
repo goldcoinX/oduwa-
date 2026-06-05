@@ -249,7 +249,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Music Portal (MADE FOR YOU card removed successfully) */}
+      {/* Music Portal */}
       {activePortal === 'music-portal' && (
         <div className="overlay">
           <div className="portal-card">
@@ -311,16 +311,18 @@ export default function App() {
         </div>
       )}
 
-      {/* Gallery Portal */}
+      {/* Gallery Portal ── PLACED ALL CHOSEN CUSTOM IMAGES HERE */}
       {activePortal === 'gallery-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Visuals</h2>
             <div className="disco-grid">
-              <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300" className="disco-img" alt="Visual 1" />
-              <img src="https://images.unsplash.com/photo-1501612780327-45045538702b?w=300" className="disco-img" alt="Visual 2" />
-              <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300" className="disco-img" alt="Visual 3" />
-              <img src="https://images.unsplash.com/photo-1459749411177-042180ce673c?w=300" className="disco-img" alt="Visual 4" />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640923591/Home%20Page%20.jpg" className="disco-img" alt="Oduwa Visual 1" />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640661544/GALLERY_Page.jpg" className="disco-img" alt="Oduwa Visual 2" />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640937551/JOIN_Page%20.jpg" className="disco-img" alt="Oduwa Visual 3" />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg" className="disco-img" alt="Oduwa Visual 4" />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg" className="disco-img" alt="Oduwa Visual 5" />
+              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640959828/Vibe%20.jpg" className="disco-img" alt="Oduwa Visual 6" />
             </div>
             <button className="btn-close" onClick={closePortal}>Back</button>
           </div>
