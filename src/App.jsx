@@ -43,7 +43,6 @@ export default function App() {
         console.log("Browser prevented autoplay (likely Low Power Mode):", error);
       });
     }
-    // Updated to pass the Linktree URL so the initial popup becomes clickable
     setTimeout(() => showToast("Belly Dancer Season Out Now", "https://linktr.ee/oduwa"), 1500);
   }, []);
 
@@ -51,8 +50,6 @@ export default function App() {
     setToastMsg(msg);
     setToastUrl(url);
     setIsToastVisible(true);
-    
-    // Gives the user slightly more time to click the link before it fades
     setTimeout(() => setIsToastVisible(false), url ? 4000 : 3000); 
   };
 
@@ -155,7 +152,8 @@ export default function App() {
         {/* NAVIGATION LINKS */}
         <nav>
           <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="nav-inflection">
-            <img src="https://uploads.onecompiler.io/44jjpumhc/44puf5qex/KO%20LOGO%20SYMBOL.svg" alt="King Oduwa Logo" className="nav-logo" />
+            {/* NEW LOGO IMAGE ASSET APPLIED */}
+            <img src="https://uploads.onecompiler.io/44jjpumhc/1780638127727/logo%20Kingoduwa.png" alt="King Oduwa Logo" className="nav-logo" />
             KINGODUWA
           </a>
           
@@ -186,7 +184,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* DYNAMIC TOAST MESSAGE (Link vs Plain Text) */}
+      {/* DYNAMIC TOAST MESSAGE */}
       {toastUrl ? (
         <a href={toastUrl} target="_blank" rel="noreferrer" className={`toast-message ${isToastVisible ? 'show' : ''}`} style={{ textDecoration: 'none', cursor: 'pointer' }}>
           {toastMsg} <span style={{ fontSize: '0.8em', marginLeft: '5px' }}>↗</span>
@@ -237,37 +235,16 @@ export default function App() {
         </div>
       )}
 
-      {/* Merch Portal */}
+      {/* Merch Portal (Updated with Coming Soon banner placement) */}
       {activePortal === 'merch-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Merch</h2>
-            <div className="disco-grid">
-              <div className="disco-item" onClick={() => addToCart('Inflection Tee', 45)}>
-                <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=300" className="disco-img" alt="Tee" />
-                <div className="disco-title">Inflection Tee • $45</div>
-              </div>
-              <div className="disco-item" onClick={() => addToCart('Studio Hoodie', 85)}>
-                <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=300" className="disco-img" alt="Hoodie" />
-                <div className="disco-title">Studio Hoodie • $85</div>
-              </div>
+            
+            <div className="coming-soon-banner">
+              COMING SOON
             </div>
-            {cart.length > 0 && (
-              <div className="cart-status">
-                <div className="section-label">Your Cart</div>
-                <div>
-                  {cart.map((item, i) => (
-                    <div key={i} className="cart-item-row">
-                      <span>{item.name}</span><span>${item.price}</span>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ borderTop: '1px solid #333', marginTop: '10px', paddingTop: '10px', fontWeight: '700', display: 'flex', justifyContent: 'space-between' }}>
-                  <span>TOTAL</span><span>${cartTotal}</span>
-                </div>
-                <button className="btn-action" onClick={handleCheckoutSubmit}>CHECKOUT</button>
-              </div>
-            )}
+
             <button className="btn-close" onClick={closePortal}>Back</button>
           </div>
         </div>
@@ -324,16 +301,16 @@ export default function App() {
         </div>
       )}
 
-      {/* Tour Portal */}
+      {/* Tour Portal (Updated with Coming Soon banner placement) */}
       {activePortal === 'tour-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">World Tour</h2>
-            <div style={{ fontSize: '0.8rem' }}>
-              <div style={{ borderBottom: '1px solid #222', padding: '15px 0', display: 'flex', justifyContent: 'space-between' }}><span>LAGOS • EKO HOTEL</span><span>MAY 12</span></div>
-              <div style={{ borderBottom: '1px solid #222', padding: '15px 0', display: 'flex', justifyContent: 'space-between' }}><span>LONDON • O2 ACADEMY</span><span>JUN 03</span></div>
-              <div style={{ borderBottom: '1px solid #222', padding: '15px 0', display: 'flex', justifyContent: 'space-between' }}><span>NYC • MADISON SQ GARDEN</span><span>JUL 15</span></div>
+            
+            <div className="coming-soon-banner">
+              COMING SOON
             </div>
+
             <button className="btn-close" onClick={closePortal}>Back</button>
           </div>
         </div>
