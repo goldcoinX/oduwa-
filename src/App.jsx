@@ -48,7 +48,6 @@ export default function App() {
     "https://uploads.onecompiler.io/44jjpumhc/1780640661544/GALLERY_Page.jpg",
     "https://uploads.onecompiler.io/44jjpumhc/1780640937551/JOIN_Page%20.jpg",
     "https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg",
-    "https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg",
     "https://uploads.onecompiler.io/44jjpumhc/1780640959828/Vibe%20.jpg"
   ];
 
