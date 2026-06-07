@@ -28,8 +28,9 @@ export default function App() {
   const [toastUrl, setToastUrl] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
   
-  // NEW STATE MODULE FOR THE CHOSEN PREVIEW IMAGE
+  // STATE MODULES FOR IMAGES
   const [previewImage, setPreviewImage] = useState(null);
+  const [galleryIndex, setGalleryIndex] = useState(0);
   
   const videoRef = useRef(null);
 
@@ -41,13 +42,25 @@ export default function App() {
   const [bookingBudget, setBookingBudget] = useState('$1k - $10k');
   const [subscribeEmail, setSubscribeEmail] = useState('');
 
+  // ─── GALLERY IMAGES ARRAY ───
+  const galleryImages = [
+    "https://uploads.onecompiler.io/44jjpumhc/1780640923591/Home%20Page%20.jpg",
+    "https://uploads.onecompiler.io/44jjpumhc/1780640661544/GALLERY_Page.jpg",
+    "https://uploads.onecompiler.io/44jjpumhc/1780640937551/JOIN_Page%20.jpg",
+    "https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg",
+    "https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg",
+    "https://uploads.onecompiler.io/44jjpumhc/1780640959828/Vibe%20.jpg"
+  ];
+
+  const nextImage = () => setGalleryIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1));
+  const prevImage = () => setGalleryIndex((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1));
+
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.play().catch(error => {
         console.log("Browser prevented autoplay (likely Low Power Mode):", error);
       });
     }
-    // Updated to point the toast pop-up to the new fanlink URL
     setTimeout(() => showToast("Belly Dancer Season Out Now", "https://fanlink.tv/xaFj"), 1500);
   }, []);
 
@@ -65,7 +78,8 @@ export default function App() {
 
   const closePortal = () => {
     setActivePortal(null);
-    setPreviewImage(null); // Reset preview layer when core portal terminates
+    setPreviewImage(null); 
+    setGalleryIndex(0); // Reset the slider back to the first image
     document.body.style.overflow = 'auto';
   };
 
@@ -157,7 +171,6 @@ export default function App() {
 
         {/* NAVIGATION LINKS */}
         <nav>
-          {/* UPDATED MAIN LOGO & TEXT URL */}
           <a href="https://fanlink.tv/xaFj" target="_blank" rel="noreferrer" className="nav-inflection">
             <img src="https://uploads.onecompiler.io/44jjpumhc/1780638127727/logo%20Kingoduwa.png" alt="King Oduwa Logo" className="nav-logo" />
             KINGODUWA
@@ -262,7 +275,6 @@ export default function App() {
           <div className="portal-card">
             <h2 className="portal-title">Discography</h2>
             <div className="disco-grid">
-              {/* UPDATED BELLY DANCER URL */}
               <a href="https://fanlink.tv/xaFj" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://uploads.onecompiler.io/44jjpumhc/44pfv7dn4/Belly%20Dancer.jpg" className="disco-img" alt="BELLY DANCER" />
                 <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>BELLY DANCER (NEW)</div>
@@ -319,19 +331,34 @@ export default function App() {
         </div>
       )}
 
-      {/* Gallery Portal */}
+      {/* Gallery Portal ── MODERN CAROUSEL LAYOUT */}
       {activePortal === 'gallery-portal' && (
         <div className="overlay">
-          <div className="portal-card">
+          <div className="portal-card" style={{ maxWidth: '850px' }}>
             <h2 className="portal-title">Visuals</h2>
-            <div className="disco-grid">
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640923591/Home%20Page%20.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 1" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640923591/Home%20Page%20.jpg")} />
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640661544/GALLERY_Page.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 2" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640661544/GALLERY_Page.jpg")} />
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640937551/JOIN_Page%20.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 3" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640937551/JOIN_Page%20.jpg")} />
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 4" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg")} />
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 5" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg")} />
-              <img src="https://uploads.onecompiler.io/44jjpumhc/1780640959828/Vibe%20.jpg" className="disco-img clickable-thumb" alt="Oduwa Visual 6" onClick={() => setPreviewImage("https://uploads.onecompiler.io/44jjpumhc/1780640959828/Vibe%20.jpg")} />
+            
+            <div className="carousel-container">
+              <button className="carousel-arrow left" onClick={prevImage}>&#10094;</button>
+              <img 
+                key={galleryIndex} 
+                src={galleryImages[galleryIndex]} 
+                className="carousel-image" 
+                alt={`Oduwa Visual ${galleryIndex + 1}`} 
+                onClick={() => setPreviewImage(galleryImages[galleryIndex])} 
+              />
+              <button className="carousel-arrow right" onClick={nextImage}>&#10095;</button>
             </div>
+            
+            <div className="carousel-dots">
+              {galleryImages.map((_, idx) => (
+                <span 
+                  key={idx} 
+                  className={`carousel-dot ${idx === galleryIndex ? 'active' : ''}`} 
+                  onClick={() => setGalleryIndex(idx)}
+                />
+              ))}
+            </div>
+
             <button className="btn-close" onClick={closePortal}>Back</button>
           </div>
         </div>
