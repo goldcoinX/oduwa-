@@ -342,7 +342,7 @@ export default function App() {
                 key={galleryIndex} 
                 src={galleryImages[galleryIndex]} 
                 className="carousel-image" 
-                alt={`Oduwa Visual ${galleryIndex + 1}`} 
+                alt={`Oduwa Gallery ${galleryIndex + 1}`} 
                 onClick={() => setPreviewImage(galleryImages[galleryIndex])} 
               />
               <button className="carousel-arrow right" onClick={nextImage}>&#10095;</button>
