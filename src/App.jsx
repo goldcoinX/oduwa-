@@ -40,6 +40,7 @@ export default function App() {
   const [bookingDate, setBookingDate] = useState('');
   const [bookingLocation, setBookingLocation] = useState('');
   const [bookingBudget, setBookingBudget] = useState('$1k - $10k');
+  const [bookingDetails, setBookingDetails] = useState(''); // Captured Details Payload
   const [subscribeEmail, setSubscribeEmail] = useState('');
 
   // ─── GALLERY IMAGES ARRAY ───
@@ -48,11 +49,18 @@ export default function App() {
     "https://uploads.onecompiler.io/44jjpumhc/1780640661544/GALLERY_Page.jpg",
     "https://uploads.onecompiler.io/44jjpumhc/1780640937551/JOIN_Page%20.jpg",
     "https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg",
+    "https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg",
     "https://uploads.onecompiler.io/44jjpumhc/1780640959828/Vibe%20.jpg"
   ];
 
   const nextImage = () => setGalleryIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1));
   const prevImage = () => setGalleryIndex((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1));
+
+  // ERROR HANDLER FOR BROKEN IMAGE LINKS
+  const handleImageError = (e) => {
+    e.target.onerror = null;
+    e.target.src = "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300"; // High-end dark vinyl placeholder
+  };
 
   useEffect(() => {
     if (videoRef.current) {
@@ -99,6 +107,7 @@ export default function App() {
       date: bookingDate,
       location: bookingLocation,
       budget: bookingBudget,
+      eventDetails: bookingDetails, // Captured Details Payload
       notes: 'Submitted via Web Abstract Portal Form'
     };
 
@@ -109,6 +118,7 @@ export default function App() {
       setBookingEmail('');
       setBookingDate('');
       setBookingLocation('');
+      setBookingDetails('');
       closePortal();
     }
   };
@@ -227,6 +237,19 @@ export default function App() {
                 <label className="section-label">Email Address</label>
                 <input type="email" placeholder="Your contact email" value={bookingEmail} onChange={(e) => setBookingEmail(e.target.value)} required />
               </div>
+              
+              {/* Event Details Section */}
+              <div className="portal-section">
+                <label className="section-label">Event Details</label>
+                <textarea 
+                  placeholder="Describe the event (e.g. Festival, Club Appearance, Private Event)..." 
+                  value={bookingDetails} 
+                  onChange={(e) => setBookingDetails(e.target.value)} 
+                  rows="3"
+                  required
+                />
+              </div>
+
               <div className="portal-section" style={{ display: 'flex', gap: '10px' }}>
                 <div style={{ flex: 1 }}>
                   <label className="section-label">Event Date</label>
@@ -268,30 +291,30 @@ export default function App() {
         </div>
       )}
 
-      {/* Music Portal */}
+      {/* Music Portal (Updated images with new Postimg URLs and fallback handlers) */}
       {activePortal === 'music-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Discography</h2>
             <div className="disco-grid">
               <a href="https://fanlink.tv/xaFj" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44pfv7dn4/Belly%20Dancer.jpg" className="disco-img" alt="BELLY DANCER" />
+                <img src="https://i.postimg.cc/15dCNbgC/belly-dancer-new-single-2.png" onError={handleImageError} className="disco-img" alt="BELLY DANCER" />
                 <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>BELLY DANCER (NEW)</div>
               </a>
               <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/INFLECTION.png" className="disco-img" alt="INFLECTION" />
-                <div className="disco-title">INFLECTION</div>
+                <img src="https://i.postimg.cc/vmYQx1x1/SAPA.png" onError={handleImageError} className="disco-img" alt="SAPA" />
+                <div className="disco-title">SAPA</div>
               </a>
               <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/OVBIALEKE.png" className="disco-img" alt="OVBIALEKE" />
+                <img src="https://i.postimg.cc/vmYQx1xc/OVBIALEKE.png" onError={handleImageError} className="disco-img" alt="OVBIALEKE" />
                 <div className="disco-title">OVBIALEKE</div>
               </a>
               <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/SON%20OF%20MAN.png" className="disco-img" alt="SON OF MAN" />
+                <img src="https://i.postimg.cc/wBw9X6DL/SON%20OF%20MAN.png" onError={handleImageError} className="disco-img" alt="SON OF MAN" />
                 <div className="disco-title">SON OF MAN</div>
               </a>
               <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
-                <img src="https://uploads.onecompiler.io/44jjpumhc/44jmbu8kc/WONDERFUL.png" className="disco-img" alt="WONDERFUL" />
+                <img src="https://i.postimg.cc/nL3n4HqQ/WONDERFUL.png" onError={handleImageError} className="disco-img" alt="WONDERFUL" />
                 <div className="disco-title">WONDERFUL</div>
               </a>
             </div>
@@ -330,7 +353,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Gallery Portal ── MODERN CAROUSEL LAYOUT */}
+      {/* Gallery Portal */}
       {activePortal === 'gallery-portal' && (
         <div className="overlay">
           <div className="portal-card" style={{ maxWidth: '850px' }}>
@@ -342,7 +365,7 @@ export default function App() {
                 key={galleryIndex} 
                 src={galleryImages[galleryIndex]} 
                 className="carousel-image" 
-                alt={`Oduwa Gallery ${galleryIndex + 1}`} 
+                alt={`Oduwa Visual ${galleryIndex + 1}`} 
                 onClick={() => setPreviewImage(galleryImages[galleryIndex])} 
               />
               <button className="carousel-arrow right" onClick={nextImage}>&#10095;</button>
