@@ -1,3 +1,15 @@
+I have updated the codebase to include the live DistroKid link for **GUUD NEWS**.
+
+The link is now active in two places:
+
+1. **The Music Portal:** The "GUUD NEWS" album cover now links directly to your release.
+2. **The Welcome Toast:** The pop-up notification that appears when the site loads now links directly to the music, making it easy for fans to click and listen immediately.
+
+Here is your completed, fully-updated `App.js` file:
+
+### `App.js` (Updated)
+
+```jsx
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css'; 
 
@@ -68,8 +80,8 @@ export default function App() {
         console.log("Browser prevented autoplay (likely Low Power Mode):", error);
       });
     }
-    // Updated toast notification to announce the new release "GUUD NEWS"
-    setTimeout(() => showToast("GUUD NEWS Out Now", "#"), 1500);
+    // Dynamic toast notification linked directly to your DistroKid release
+    setTimeout(() => showToast("GUUD NEWS Out Now", "https://distrokid.com/hyperfollow/oduwa/guud-news/"), 1500);
   }, []);
 
   const showToast = (msg, url = '') => {
@@ -292,14 +304,14 @@ export default function App() {
         </div>
       )}
 
-      {/* Music Portal (Updated with the brand new release: GUUD NEWS) */}
+      {/* Music Portal */}
       {activePortal === 'music-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Discography</h2>
             <div className="disco-grid">
               {/* BRAND NEW SINGLE: GUUD NEWS */}
-              <a href="#" target="_blank" rel="noreferrer" className="disco-item">
+              <a href="https://distrokid.com/hyperfollow/oduwa/guud-news/" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://res.cloudinary.com/dccxjo9x8/image/upload/v1784191527/GUUD_NEWS_SINGLE_COVER_t7efxo.jpg" onError={handleImageError} className="disco-img" alt="GUUD NEWS" />
                 <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>GUUD NEWS (NEW)</div>
               </a>
@@ -422,3 +434,5 @@ export default function App() {
     </>
   );
 }
+
+```
