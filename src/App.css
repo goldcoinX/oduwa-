@@ -14,6 +14,7 @@ body, html {
     background-color: var(--bg-color); color: var(--text-color);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent; /* Seamless tap animations on iOS */
     overflow-x: hidden;
     overflow-y: auto;
     scroll-behavior: smooth;
@@ -156,7 +157,24 @@ footer { text-align: center; opacity: 0.5; }
 .portal-title { font-family: var(--font-main); font-size: 1.8rem; color: var(--accent); margin-top: 0; margin-bottom: 25px; text-align: center; text-transform: uppercase; }
 .portal-section { margin-bottom: 20px; }
 .section-label { display: block; margin-bottom: 8px; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.15em; color: #888; text-transform: uppercase; }
-input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; background: #000; color: #fff; font-family: var(--font-body); box-sizing: border-box; font-size: 14px; }
+
+input, textarea, select { 
+    width: 100%; padding: 14px; 
+    border: 1px solid #222; 
+    background: #000; 
+    color: #fff; 
+    font-family: var(--font-body); 
+    box-sizing: border-box; 
+    font-size: 14px; 
+    outline: none;
+}
+/* Restricted textarea growth limits to save form dimensions */
+textarea {
+    resize: vertical;
+    min-height: 80px;
+    max-height: 200px;
+}
+
 .btn-action { background: #fff; color: #000; border: none; padding: 16px; cursor: pointer; font-family: var(--font-main); font-weight: 700; width: 100%; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 10px; }
 
 /* BACK / CLOSE BUTTON */
@@ -239,6 +257,7 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
     border-radius: 4px;
     overflow: hidden;
     padding: 10px 0;
+    user-select: none; /* Prevents text selection on rapid clicks */
 }
 .carousel-image {
     width: 100%;
@@ -265,6 +284,7 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
     font-size: 1rem;
     transition: var(--transition);
     backdrop-filter: blur(5px);
+    user-select: none;
 }
 .carousel-arrow:hover {
     background: #fff;
@@ -279,6 +299,7 @@ input, textarea, select { width: 100%; padding: 14px; border: 1px solid #222; ba
     justify-content: center;
     gap: 10px;
     margin-bottom: 10px;
+    user-select: none;
 }
 .carousel-dot {
     width: 8px;
