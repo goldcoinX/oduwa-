@@ -1,15 +1,3 @@
-I have updated the codebase to include the live DistroKid link for **GUUD NEWS**.
-
-The link is now active in two places:
-
-1. **The Music Portal:** The "GUUD NEWS" album cover now links directly to your release.
-2. **The Welcome Toast:** The pop-up notification that appears when the site loads now links directly to the music, making it easy for fans to click and listen immediately.
-
-Here is your completed, fully-updated `App.js` file:
-
-### `App.js` (Updated)
-
-```jsx
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css'; 
 
@@ -434,5 +422,3 @@ export default function App() {
     </>
   );
 }
-
-```
