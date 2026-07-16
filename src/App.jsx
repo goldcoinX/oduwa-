@@ -336,7 +336,7 @@ export default function App() {
           <div className="portal-card">
             <h2 className="portal-title">Biography</h2>
             <div style={{ fontSize: '0.9rem', lineHeight: '1.7', color: '#ccc' }}>
-              <p><strong>ODUWA</strong> is more than an artist; he is a sonic architect. Born in Nigeria and raised within the vibrant polyrhythms of Afrobeat, Oduwa has spent years meticulously crafting a sound that bridges the gap between raw street energy and high-fashion luxury.</p>
+              <p><strong>ODUWA</strong> is more than an artist; he is a sonic architect. A Nigerian American raised, within the vibrant polyrhythms of Afrobeat, Oduwa has spent years meticulously crafting a sound that bridges the gap between raw street energy and high-fashion luxury.</p>
               <p>Following the visual hypnosis of <em>BELLY DANCER</em>, his brand new single <em>GUUD NEWS</em> is a daring progression in his aesthetic—layering rich concept styles over deep, syncopated global rhythms.</p>
               <p>2026 marks the beginning of the Global Tour cycle, scaling up experimental visions to live crowds across borders.</p>
             </div>
