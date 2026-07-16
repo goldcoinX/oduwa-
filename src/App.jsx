@@ -68,7 +68,8 @@ export default function App() {
         console.log("Browser prevented autoplay (likely Low Power Mode):", error);
       });
     }
-    setTimeout(() => showToast("Belly Dancer Season Out Now", "https://fanlink.tv/xaFj"), 1500);
+    // Updated toast notification to announce the new release "GUUD NEWS"
+    setTimeout(() => showToast("GUUD NEWS Out Now", "#"), 1500);
   }, []);
 
   const showToast = (msg, url = '') => {
@@ -291,15 +292,21 @@ export default function App() {
         </div>
       )}
 
-      {/* Music Portal (Updated images with new Postimg URLs and fallback handlers) */}
+      {/* Music Portal (Updated with the brand new release: GUUD NEWS) */}
       {activePortal === 'music-portal' && (
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Discography</h2>
             <div className="disco-grid">
+              {/* BRAND NEW SINGLE: GUUD NEWS */}
+              <a href="#" target="_blank" rel="noreferrer" className="disco-item">
+                <img src="https://res.cloudinary.com/dccxjo9x8/image/upload/v1784191527/GUUD_NEWS_SINGLE_COVER_t7efxo.jpg" onError={handleImageError} className="disco-img" alt="GUUD NEWS" />
+                <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>GUUD NEWS (NEW)</div>
+              </a>
+              {/* BELLY DANCER */}
               <a href="https://fanlink.tv/xaFj" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://i.postimg.cc/15dCNbgC/belly-dancer-new-single-2.png" onError={handleImageError} className="disco-img" alt="BELLY DANCER" />
-                <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>BELLY DANCER (NEW)</div>
+                <div className="disco-title">BELLY DANCER</div>
               </a>
               <a href="https://linktr.ee/oduwa" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://i.postimg.cc/vmYQx1x1/SAPA.png" onError={handleImageError} className="disco-img" alt="SAPA" />
@@ -330,7 +337,7 @@ export default function App() {
             <h2 className="portal-title">Biography</h2>
             <div style={{ fontSize: '0.9rem', lineHeight: '1.7', color: '#ccc' }}>
               <p><strong>ODUWA</strong> is more than an artist; he is a sonic architect. Born in Nigeria and raised within the vibrant polyrhythms of Afrobeat, Oduwa has spent years meticulously crafting a sound that bridges the gap between raw street energy and high-fashion luxury.</p>
-              <p>His latest single, <em>BELLY DANCER</em>, marks a daring progression in his aesthetic—layering hypnotic visual concepts over hard-hitting international syncopated grooves.</p>
+              <p>Following the visual hypnosis of <em>BELLY DANCER</em>, his brand new single <em>GUUD NEWS</em> is a daring progression in his aesthetic—layering rich concept styles over deep, syncopated global rhythms.</p>
               <p>2026 marks the beginning of the Global Tour cycle, scaling up experimental visions to live crowds across borders.</p>
             </div>
             <button className="btn-close" onClick={closePortal}>Back</button>
