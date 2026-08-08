@@ -45,12 +45,11 @@ export default function App() {
 
   // ─── GALLERY IMAGES ARRAY ───
   const galleryImages = [
-    "https://uploads.onecompiler.io/44jjpumhc/1780640923591/Home%20Page%20.jpg",
-    "https://uploads.onecompiler.io/44jjpumhc/1780640661544/GALLERY_Page.jpg",
-    "https://uploads.onecompiler.io/44jjpumhc/1780640937551/JOIN_Page%20.jpg",
-    "https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg",
-    "https://uploads.onecompiler.io/44jjpumhc/1780640950366/TOUR_Page.jpg",
-    "https://uploads.onecompiler.io/44jjpumhc/1780640959828/Vibe%20.jpg"
+    "https://res.cloudinary.com/dccxjo9x8/image/upload/v1784818791/Home_Page_i4dyu8.jpg",
+    "https://res.cloudinary.com/dccxjo9x8/image/upload/v1784818892/Vibe_iwnfrp.jpg",
+    "https://res.cloudinary.com/dccxjo9x8/image/upload/v1784818885/GALLERY_Page_w9aynh.jpg",
+    "https://res.cloudinary.com/dccxjo9x8/image/upload/v1784818894/JOIN_Page_bsnwah.jpg",
+    "https://res.cloudinary.com/dccxjo9x8/image/upload/v1784818892/TOUR_Page_y6qif9.jpg"
   ];
 
   const nextImage = () => setGalleryIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1));
@@ -107,10 +106,24 @@ export default function App() {
     showToast(`Added ${name} to Cart`);
   };
 
-  // ─── LIVE BACKEND HANDLERS ───
+  // ─── LIVE BACKEND HANDLERS WITH TIKTOK EVENT TRACKING ───
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     showToast('Sending Booking Request...');
+
+    // TikTok Event: SubmitForm (Tracking high-value booking leads)
+    if (window.ttq) {
+      window.ttq.track('SubmitForm', {
+        "contents": [
+          {
+            "content_id": "oduwa_booking",
+            "content_type": "product_group",
+            "content_name": "Booking Inquiry"
+          }
+        ],
+        "status": "submitted"
+      });
+    }
     
     const payload = {
       action: 'booking',
@@ -119,7 +132,7 @@ export default function App() {
       date: bookingDate,
       location: bookingLocation,
       budget: bookingBudget,
-      eventDetails: bookingDetails, // Captured Details Payload
+      eventDetails: bookingDetails, 
       notes: 'Submitted via Web Abstract Portal Form'
     };
 
@@ -138,6 +151,20 @@ export default function App() {
   const handleSubscribeSubmit = async (e) => {
     e.preventDefault();
     showToast('Synchronizing Frequencies...');
+
+    // TikTok Event: CompleteRegistration (Tracking email list growth)
+    if (window.ttq) {
+      window.ttq.track('CompleteRegistration', {
+        "contents": [
+          {
+            "content_id": "tribe_subscription",
+            "content_type": "product_group",
+            "content_name": "Join Tribe Form"
+          }
+        ],
+        "status": "submitted"
+      });
+    }
 
     const payload = {
       action: 'subscribe',
