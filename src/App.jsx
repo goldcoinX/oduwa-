@@ -40,7 +40,7 @@ export default function App() {
   const [bookingDate, setBookingDate] = useState('');
   const [bookingLocation, setBookingLocation] = useState('');
   const [bookingBudget, setBookingBudget] = useState('$1k - $10k');
-  const [bookingDetails, setBookingDetails] = useState(''); // Captured Details Payload
+  const [bookingDetails, setBookingDetails] = useState(''); 
   const [subscribeEmail, setSubscribeEmail] = useState('');
 
   // ─── GALLERY IMAGES ARRAY ───
@@ -58,19 +58,34 @@ export default function App() {
   // ERROR HANDLER FOR BROKEN IMAGE LINKS
   const handleImageError = (e) => {
     e.target.onerror = null;
-    e.target.src = "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300"; // High-end dark vinyl placeholder
+    e.target.src = "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300"; 
   };
 
   useEffect(() => {
-    // ─── TIKTOK PIXEL BASE CODE INJECTION ───
-    !function (w, d, t) {
-      w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
-      var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
-      ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
-      ttq.load('D9R151BC77U5OHLI5M60');
-      ttq.page();
-    }(window, document, 'ttq');
-    // ────────────────────────────────────────
+    // ─── AUTOMATIC GTM INJECTION INTO DOCUMENT HEAD & BODY ───
+    if (!document.getElementById('gtm-script')) {
+      // 1. Head Script Injection
+      const gtmScript = document.createElement('script');
+      gtmScript.id = 'gtm-script';
+      gtmScript.innerHTML = `
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-KJWB6WHS');
+      `;
+      document.head.appendChild(gtmScript);
+
+      // 2. Body Noscript Fallback Injection
+      const gtmNoscript = document.createElement('noscript');
+      gtmNoscript.id = 'gtm-noscript';
+      gtmNoscript.innerHTML = `
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KJWB6WHS"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      `;
+      document.body.insertBefore(gtmNoscript, document.body.firstChild);
+    }
+    // ────────────────────────────────────────────────────────
 
     if (videoRef.current) {
       videoRef.current.play().catch(error => {
@@ -78,7 +93,6 @@ export default function App() {
       });
     }
     
-    // Dynamic toast notification linked directly to your DistroKid release
     setTimeout(() => showToast("GUUD NEWS Out Now", "https://distrokid.com/hyperfollow/oduwa/guud-news/"), 1500);
   }, []);
 
@@ -97,7 +111,7 @@ export default function App() {
   const closePortal = () => {
     setActivePortal(null);
     setPreviewImage(null); 
-    setGalleryIndex(0); // Reset the slider back to the first image
+    setGalleryIndex(0); 
     document.body.style.overflow = 'auto';
   };
 
@@ -106,22 +120,15 @@ export default function App() {
     showToast(`Added ${name} to Cart`);
   };
 
-  // ─── LIVE BACKEND HANDLERS WITH TIKTOK EVENT TRACKING ───
+  // ─── LIVE BACKEND HANDLERS WITH GTM DATA LAYER EVENTS ───
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     showToast('Sending Booking Request...');
 
-    // TikTok Event: SubmitForm (Tracking high-value booking leads)
-    if (window.ttq) {
-      window.ttq.track('SubmitForm', {
-        "contents": [
-          {
-            "content_id": "oduwa_booking",
-            "content_type": "product_group",
-            "content_name": "Booking Inquiry"
-          }
-        ],
-        "status": "submitted"
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: 'booking_submitted',
+        content_name: 'Booking Inquiry'
       });
     }
     
@@ -152,17 +159,10 @@ export default function App() {
     e.preventDefault();
     showToast('Synchronizing Frequencies...');
 
-    // TikTok Event: CompleteRegistration (Tracking email list growth)
-    if (window.ttq) {
-      window.ttq.track('CompleteRegistration', {
-        "contents": [
-          {
-            "content_id": "tribe_subscription",
-            "content_type": "product_group",
-            "content_name": "Join Tribe Form"
-          }
-        ],
-        "status": "submitted"
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: 'complete_registration',
+        content_name: 'Join Tribe Form'
       });
     }
 
