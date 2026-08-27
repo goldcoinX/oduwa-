@@ -334,12 +334,46 @@ export default function App() {
       {activePortal === 'music-portal' && (
         <div className="overlay">
           <div className="portal-card">
-            <h2 className="portal-title">Discography</h2>
+            <h2 className="portal-title">GUUD MUZIK EP</h2>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '30px' }}>
+              {/* Track 1: Press Release */}
+              <div>
+                <span className="section-label">Oduwa - Press Release</span>
+                <iframe 
+                  style={{ borderRadius: '12px' }} 
+                  src="https://open.spotify.com/embed/track/3hMP0xyerEWxn2a52CSoP1?utm_source=generator&theme=0&si=f145fdd791d0493e" 
+                  width="100%" 
+                  height="152" 
+                  frameBorder="0" 
+                  allowFullScreen="" 
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                  loading="lazy">
+                </iframe>
+              </div>
+
+              {/* Track 2: Jambole */}
+              <div>
+                <span className="section-label">Oduwa - Jambole</span>
+                <iframe 
+                  style={{ borderRadius: '12px' }} 
+                  src="https://open.spotify.com/embed/track/3VrPCYvJuZ5I8YDwHq4wIa?utm_source=generator&theme=0&si=25e7a0c72586452b" 
+                  width="100%" 
+                  height="152" 
+                  frameBorder="0" 
+                  allowFullScreen="" 
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                  loading="lazy">
+                </iframe>
+              </div>
+            </div>
+
+            <div className="section-label" style={{ textAlign: 'center', marginBottom: '15px' }}>Past Releases</div>
             <div className="disco-grid">
               {/* BRAND NEW SINGLE: GUUD NEWS */}
               <a href="https://distrokid.com/hyperfollow/oduwa/guud-news/" target="_blank" rel="noreferrer" className="disco-item">
                 <img src="https://res.cloudinary.com/dccxjo9x8/image/upload/v1784191527/GUUD_NEWS_SINGLE_COVER_t7efxo.jpg" onError={handleImageError} className="disco-img" alt="GUUD NEWS" />
-                <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>GUUD NEWS (NEW)</div>
+                <div className="disco-title" style={{ color: '#fff', fontWeight: 'bold' }}>GUUD NEWS</div>
               </a>
               {/* BELLY DANCER */}
               <a href="https://fanlink.tv/xaFj" target="_blank" rel="noreferrer" className="disco-item">
@@ -436,6 +470,11 @@ export default function App() {
         <div className="overlay">
           <div className="portal-card">
             <h2 className="portal-title">Join Tribe</h2>
+            
+            <div style={{ color: '#aaa', lineHeight: '1.6', fontSize: '0.9rem', textAlign: 'center', marginBottom: '20px' }}>
+              Join the Tribe to unlock the exclusive GUUD NEWS CapCut template.
+            </div>
+
             <form onSubmit={handleSubscribeSubmit}>
               <div className="portal-section">
                 <label className="section-label">Email</label>
